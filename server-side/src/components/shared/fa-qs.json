@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_shared_fa_qs",
+  "info": {
+    "displayName": "FAQs",
+    "icon": "question-circle"
+  },
+  "options": {},
+  "attributes": {
+    "faqTitle": {
+      "type": "string",
+      "required": true
+    },
+    "faqDescription": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

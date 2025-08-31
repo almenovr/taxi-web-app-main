@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_shared_car_blocks",
+  "info": {
+    "displayName": "Car block",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "className": {
+      "type": "string"
+    },
+    "carImg": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "listCars": {
+      "type": "string"
+    },
+    "price": {
+      "type": "integer"
+    },
+    "isBusiness": {
+      "type": "boolean"
+    },
+    "pricePerKm": {
+      "type": "integer"
+    },
+    "description": {
+      "type": "richtext"
+    }
+  }
+}
