@@ -5,6 +5,7 @@ import Showdown from "showdown";
 import {Metadata} from "next";
 import Image from "next/image";
 import { MapPinIcon, ClockIcon, PhoneIcon, StarIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
 
 interface Car {
     id: number;
@@ -49,12 +50,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 async function getData(slug: string): Promise<{ data: Destination[] }> {
-    const response = await fetch(
-        `http://localhost:1337/api/destinations?filters[slug][$eq]=${slug}&populate[cars][populate]=*&populate[faqs][populate]=*&populate[textBlock][populate]=*`,
-        { cache: "no-store" } // Отключаем кэширование для SSR
+    const response = await axios.get(
+        `https://strapi-production-5b34.up.railway.app/api/destinations?filters[slug][$eq]=${slug}&populate[cars][populate]=*&populate[faqs][populate]=*&populate[textBlock][populate]=*`
     );
-    if (!response.ok) throw new Error("Ошибка загрузки данных");
-    return await response.json();
+    return response.data;
 }
 
 const ListingCarDetailPage: ({params}: { params: any }) => Promise<React.JSX.Element> = async ({ params }) => {
@@ -212,7 +211,7 @@ const ListingCarDetailPage: ({params}: { params: any }) => Promise<React.JSX.Ele
                 {/* Car Card */}
                 <div className="transform transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full">
                     <PropertyCardH
-                        imgSrc={carImg?.url ? `http://localhost:1337${carImg.url}` : ""}
+                        imgSrc={carImg?.url ? `https://strapi-production-5b34.up.railway.app${carImg.url}` : ""}
                         title={listCars}
                         price={price}
                         cityOrigin={cityOrigin}

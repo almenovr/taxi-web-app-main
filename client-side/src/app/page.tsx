@@ -9,16 +9,14 @@ import SectionGridFeaturePlaces from "@/components/SectionGridFeaturePlaces";
 import SectionHowItWork from "@/components/SectionHowItWork";
 import SectionGridAuthorBox from "@/components/SectionGridAuthorBox";
 import {Metadata} from "next";
+import axios from "axios";
 
 
 async function getHomePageDataWithRelations() {
   try {
-    const response = await fetch('http://localhost:1337/api/global?populate[destinations][populate]=*', {
+    const response = await axios.get('https://strapi-production-5b34.up.railway.app/api/home-page?populate[destinations][populate]=*', {
       headers: { 'Cache-Control': 'no-cache' } });
-    if (!response.ok) {
-      throw new Error('Failed to fetch home page data');
-    }
-    return response.json();
+    return response.data;
   } catch (error) {
     console.error('Error fetching home page data:', error);
     return { data: { destinations: [], sliderTitle: '', sliderText: '', blockText: '', blockTitle: '', blockTextTwo: '', blockTitleTwo: '', blockTextThree: '', blockTitleThree: '', blockTextFour: '', blockTitleFour: '', blockTextFive: '', blockTitleFive: '' } };
@@ -27,12 +25,9 @@ async function getHomePageDataWithRelations() {
 
 async function getHomePageData() {
   try {
-    const response = await fetch('http://localhost:1337/api/global', {
+    const response = await axios.get('https://strapi-production-5b34.up.railway.app/api/home-page', {
       headers: { 'Cache-Control': 'no-cache' } });
-    if (!response.ok) {
-      throw new Error('Failed to fetch global data');
-    }
-    return response.json();
+    return response.data;
   } catch (error) {
     console.error('Error fetching global data:', error);
     return { data: { siteName: 'Taxi App', siteDescription: 'Заказ такси' } };
@@ -52,7 +47,7 @@ const structuredData = {
   "@type": "Organization",
   "name": "Такси Сервис",
   "url": "http://localhost:3000",
-  "logo": "http://localhost:1337/uploads/logo.png",
+  "logo": "https://strapi-production-5b34.up.railway.app/uploads/logo.png",
   "description": "Быстрый и надежный заказ такси. Доступные цены, профессиональные водители.",
   "contactPoint": {
     "@type": "ContactPoint",
@@ -76,7 +71,7 @@ async function PageHome() {
           name: destination.cityWhen,
           taxonomy: "category",
           count: 1,
-          thumbnail: 'http://localhost:1337' + destination.displayImage?.url,
+          thumbnail: 'https://strapi-production-5b34.up.railway.app' + destination.displayImage?.url,
       });
   }
   return (

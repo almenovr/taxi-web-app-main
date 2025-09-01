@@ -56,9 +56,9 @@ const nextConfig = {
         pathname: "/**",
       },
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "1337",
+        protocol: "https",
+        hostname: "strapi-production-5b34.up.railway.app",
+        port: "",
         pathname: "/**",
       },
       {

@@ -30,13 +30,13 @@ export default function RootLayout({
       <head>
         <meta property="og:title" content="Такси Сервис - Заказ такси онлайн" />
         <meta property="og:description" content="Быстрый и надежный заказ такси. Доступные цены, профессиональные водители." />
-        <meta property="og:image" content="http://localhost:1337/uploads/taxi_og_image.jpg" />
+        <meta property="og:image" content="https://strapi-production-5b34.up.railway.app/uploads/taxi_og_image.jpg" />
         <meta property="og:url" content="http://localhost:3000" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Такси Сервис - Заказ такси онлайн" />
         <meta name="twitter:description" content="Быстрый и надежный заказ такси. Доступные цены, профессиональные водители." />
-        <meta name="twitter:image" content="http://localhost:1337/uploads/taxi_og_image.jpg" />
+        <meta name="twitter:image" content="https://strapi-production-5b34.up.railway.app/uploads/taxi_og_image.jpg" />
         <link rel="canonical" href="http://localhost:3000" />
       </head>
       <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">

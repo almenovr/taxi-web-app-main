@@ -3,8 +3,8 @@
 import React, {FC, useRef, useState, useEffect} from "react";
 import {MapPinIcon} from "@heroicons/react/24/outline";
 import ClearDataButton from "@/app/(client-components)/(HeroSearchForm)/ClearDataButton";
-import {Popover} from "@headlessui/react";
 import {useRouter} from "next/navigation";
+import axios from "axios";
 
 export interface RentalCarSearchFormProps {}
 
@@ -57,11 +57,8 @@ const RentalCarSearchForm: FC<RentalCarSearchFormProps> = ({}) => {
   const handleClick = async (e: any) => {
       e.preventDefault();
       try {
-        const response = await fetch(`http://localhost:1337/api/destinations?filters[$and][0][cityOrigin][$eq]=${cityOrigin}&filters[$and][1][cityWhen][$eq]=${cityWhen}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch destinations');
-        }
-        const data = await response.json();
+        const response = await axios.get(`https://strapi-production-5b34.up.railway.app/api/destinations?filters[$and][0][cityOrigin][$eq]=${cityOrigin}&filters[$and][1][cityWhen][$eq]=${cityWhen}`);
+        const data = response.data;
         if(data.data.length > 0)
           router.push(data.data[0].slug);
         else {
@@ -183,48 +180,36 @@ const RentalCarSearchForm: FC<RentalCarSearchFormProps> = ({}) => {
                   ></div>
               )}
           </div>
-          <Popover
-              className={`RentalCarDatesRangeInput relative flex flex-1`}
-          >
-              {({ open }) => (
-                  <>
-                      <div
-                          className={`flex-1 z-10 flex items-center focus:outline-none ${
-                              open ? "nc-hero-field-focused" : ""
-                          }`}
+          <div className={`RentalCarDatesRangeInput relative flex flex-1`}>
+              <div className={`flex-1 z-10 flex items-center focus:outline-none`}>
+                  <div className="pr-2 xl:pr-4">
+                      <button
+                          onClick={handleClick}
+                          type="button"
+                          className="h-14 md:h-16 w-full md:w-16 rounded-full bg-primary-6000 hover:bg-primary-700 flex items-center justify-center text-neutral-50 focus:outline-none"
                       >
-
-                              <div className="pr-2 xl:pr-4">
-                                  <button
-                                      onClick={handleClick}
-                                      type="button"
-                                      className="h-14 md:h-16 w-full md:w-16 rounded-full bg-primary-6000 hover:bg-primary-700 flex items-center justify-center text-neutral-50 focus:outline-none"
-                                  >
-                                      <span className="mr-3 md:hidden">Search</span>
-                                      <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          className="h-6 w-6"
-                                          fill="none"
-                                          viewBox="0 0 24 24"
-                                          stroke="currentColor"
-                                      >
-                                          <path
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              strokeWidth={1.5}
-                                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                          />
-                                      </svg>
-                                  </button>
-                              </div>
-                      </div>
-
-                      {open && (
-                          <div className="h-8 absolute self-center top-1/2 -translate-y-1/2 z-0 -left-0.5 right-0.5 bg-white dark:bg-neutral-800"></div>
-                      )}
-                  </>
+                          <span className="mr-3 md:hidden">Search</span>
+                          <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-6 w-6"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                          >
+                              <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={1.5}
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                              />
+                          </svg>
+                      </button>
+                  </div>
+              </div>
+              {showPopover && (
+                  <div className="h-8 absolute self-center top-1/2 -translate-y-1/2 z-0 -left-0.5 right-0.5 bg-white dark:bg-neutral-800"></div>
               )}
-          </Popover>
+          </div>
       </div>
     </form>
   );
