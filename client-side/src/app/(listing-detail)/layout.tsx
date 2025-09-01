@@ -2,14 +2,14 @@
 
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { ReactNode } from "react";
+import React, { ReactNode, Suspense } from "react";
 import MobileFooterSticky from "./(components)/MobileFooterSticky";
 import { imageGallery as listingStayImageGallery } from "./listing-stay-detail/constant";
 import { imageGallery as listingCarImageGallery } from "./listing-car-detail/constant";
 import { imageGallery as listingExperienceImageGallery } from "./listing-experiences-detail/constant";
 import { Route } from "next";
 
-const DetailtLayout = ({ children }: { children: ReactNode }) => {
+const ImageGalleryWrapper = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const thisPathname = usePathname();
   const searchParams = useSearchParams();
@@ -36,14 +36,25 @@ const DetailtLayout = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <div className="ListingDetailPage">
+    <>
       <ListingImageGallery
         isShowModal={modal === "PHOTO_TOUR_SCROLLABLE"}
         onClose={handleCloseModalImageGallery}
         images={getImageGalleryListing()}
       />
+      {children}
+    </>
+  );
+};
 
-      <div className="container ListingDetailPage__content">{children}</div>
+const DetailtLayout = ({ children }: { children: ReactNode }) => {
+  return (
+    <div className="ListingDetailPage">
+      <Suspense fallback={<div>Loading...</div>}>
+        <ImageGalleryWrapper>
+          <div className="container ListingDetailPage__content">{children}</div>
+        </ImageGalleryWrapper>
+      </Suspense>
 
       {/* OTHER SECTION */}
       <div className="container py-24 lg:py-32">

@@ -20,10 +20,8 @@ const poppins = Poppins({
 
 export default function RootLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: any;
 }) {
   return (
     <html lang="ru" className={poppins.className}>

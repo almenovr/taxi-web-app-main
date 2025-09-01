@@ -1,8 +1,12 @@
-import React from "react";
+import React, { Suspense } from "react";
 import CheckOutPagePageMain from "./PageMain";
 
 const page = () => {
-  return <CheckOutPagePageMain />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CheckOutPagePageMain />
+    </Suspense>
+  );
 };
 
 export default page;
