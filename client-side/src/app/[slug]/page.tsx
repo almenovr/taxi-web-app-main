@@ -56,7 +56,7 @@ async function getData(slug: string): Promise<{ data: Destination[] }> {
     return response.data;
 }
 
-const ListingCarDetailPage: ({params}: { params: any }) => Promise<React.JSX.Element> = async ({ params }) => {
+const ListingCarDetailPage: ({params}: { params: any }) => Promise<JSX.Element> = async ({ params }) => {
     let data: Destination | null = null;
     let error: string | null = null;
 

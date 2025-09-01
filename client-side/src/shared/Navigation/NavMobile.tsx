@@ -28,9 +28,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
         {item.children?.map((i, index) => (
           <Disclosure key={i.href + index} as="li">
             <Link
-              href={{
-                pathname: i.href || undefined,
-              }}
+              href={i.href || "/"}
               className="flex px-4 text-neutral-900 dark:text-neutral-200 text-sm font-medium rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-0.5"
             >
               <span

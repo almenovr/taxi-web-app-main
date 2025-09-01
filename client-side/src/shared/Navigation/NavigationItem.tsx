@@ -64,55 +64,55 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
     const classPanel = isFull ? "left-0" : "-translate-x-1/2 left-1/2";
 
     return (
-      <Popover
-        as="li"
+      <li
         className={`menu-item flex items-center menu-megamenu ${classPopover}`}
         onMouseEnter={() => onMouseEnterMenu(menu.id)}
         onMouseLeave={() => onMouseLeaveMenu(menu.id)}
       >
-        {() => (
-          <>
-            <div>{renderMainItem(menu)}</div>
-            <Transition
-              as={Fragment}
-              show={isHover}
-              enter="transition ease-out duration-150"
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
-            >
-              <Popover.Panel
-                static
-                className={`will-change-transform sub-menu absolute top-full transform z-10 w-screen max-w-sm px-4 sm:px-0 lg:max-w-max ${classPanel}`}
+        <Link
+          rel="noopener noreferrer"
+          className="inline-flex items-center text-sm xl:text-base font-normal text-neutral-700 dark:text-neutral-300 py-2 px-4 xl:px-5 rounded-full hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+          href={menu.href || "/"}
+        >
+          {menu.name}
+        </Link>
+        <Transition
+          as={Fragment}
+          show={isHover}
+          enter="transition ease-out duration-150"
+          enterFrom="opacity-0 translate-y-1"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition ease-in duration-150"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 translate-y-1"
+        >
+          <div
+            className={`will-change-transform sub-menu absolute top-full transform z-10 w-screen max-w-sm px-4 sm:px-0 lg:max-w-max ${classPanel}`}
+          >
+            <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 dark:ring-opacity-10 text-sm">
+              <div
+                className={`relative bg-white dark:bg-neutral-900 px-3 py-6 grid gap-1 grid-cols-${menu.megaMenu?.length}`}
               >
-                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 dark:ring-opacity-10 text-sm">
-                  <div
-                    className={`relative bg-white dark:bg-neutral-900 px-3 py-6 grid gap-1 grid-cols-${menu.megaMenu?.length}`}
-                  >
-                    {menu.megaMenu?.map((item) => (
-                      <div key={item.id}>
-                        <div className="px-2">
-                          <div className="w-36 h-24 rounded-lg overflow-hidden relative flex">
-                            <Image alt="" src={item.image} fill sizes="200px" />
-                          </div>
-                        </div>
-                        <p className="font-medium text-neutral-900 dark:text-neutral-200 py-1 px-2 my-2">
-                          {item.title}
-                        </p>
-                        <ul className="grid space-y-1">
-                          {item.items.map(renderMegaMenuNavlink)}
-                        </ul>
+                {menu.megaMenu?.map((item) => (
+                  <div key={item.id}>
+                    <div className="px-2">
+                      <div className="w-36 h-24 rounded-lg overflow-hidden relative flex">
+                        <Image alt="" src={item.image} fill sizes="200px" />
                       </div>
-                    ))}
+                    </div>
+                    <p className="font-medium text-neutral-900 dark:text-neutral-200 py-1 px-2 my-2">
+                      {item.title}
+                    </p>
+                    <ul className="grid space-y-1">
+                      {item.items.map(renderMegaMenuNavlink)}
+                    </ul>
                   </div>
-                </div>
-              </Popover.Panel>
-            </Transition>
-          </>
-        )}
-      </Popover>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </li>
     );
   };
 
@@ -134,100 +134,88 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
   const renderDropdownMenu = (menuDropdown: NavItemType) => {
     const isHover = menuCurrentHovers.includes(menuDropdown.id);
     return (
-      <Popover
-        as="li"
+      <li
         className={`menu-item flex items-center menu-dropdown relative ${
           menuDropdown.isNew ? "menuIsNew_lv1" : ""
         }`}
         onMouseEnter={() => onMouseEnterMenu(menuDropdown.id)}
         onMouseLeave={() => onMouseLeaveMenu(menuDropdown.id)}
       >
-        {() => (
-          <>
-            <div>{renderMainItem(menuDropdown)}</div>
-            <Transition
-              as={Fragment}
-              show={isHover}
-              enter="transition ease-out duration-150 "
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
-            >
-              <Popover.Panel
-                static
-                className="sub-menu will-change-transform absolute transform z-10 w-56 top-full left-0"
-              >
-                <ul className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-white dark:ring-opacity-10 text-sm relative bg-white dark:bg-neutral-900 py-4 grid space-y-1">
-                  {menuDropdown.children?.map((i) => {
-                    if (i.type) {
-                      return renderDropdownMenuNavlinkHasChild(i);
-                    } else {
-                      return (
-                        <li
-                          key={i.id}
-                          className={`px-2 ${i.isNew ? "menuIsNew" : ""}`}
-                        >
-                          {renderDropdownMenuNavlink(i)}
-                        </li>
-                      );
-                    }
-                  })}
-                </ul>
-              </Popover.Panel>
-            </Transition>
-          </>
-        )}
-      </Popover>
+        <div>{renderMainItem(menuDropdown)}</div>
+        <Transition
+          as={Fragment}
+          show={isHover}
+          enter="transition ease-out duration-150 "
+          enterFrom="opacity-0 translate-y-1"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition ease-in duration-150"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 translate-y-1"
+        >
+          <div
+            className="sub-menu will-change-transform absolute transform z-10 w-56 top-full left-0"
+          >
+            <ul className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-white dark:ring-opacity-10 text-sm relative bg-white dark:bg-neutral-900 py-4 grid space-y-1">
+              {menuDropdown.children?.map((i) => {
+                if (i.type) {
+                  return renderDropdownMenuNavlinkHasChild(i);
+                } else {
+                  return (
+                    <li
+                      key={i.id}
+                      className={`px-2 ${i.isNew ? "menuIsNew" : ""}`}
+                    >
+                      {renderDropdownMenuNavlink(i)}
+                    </li>
+                  );
+                }
+              })}
+            </ul>
+          </div>
+        </Transition>
+      </li>
     );
   };
 
   const renderDropdownMenuNavlinkHasChild = (item: NavItemType) => {
     const isHover = menuCurrentHovers.includes(item.id);
     return (
-      <Popover
-        as="li"
+      <li
         key={item.id}
         className="menu-item flex items-center menu-dropdown relative px-2"
         onMouseEnter={() => onMouseEnterMenu(item.id)}
         onMouseLeave={() => onMouseLeaveMenu(item.id)}
       >
-        {() => (
-          <>
-            <div>{renderDropdownMenuNavlink(item)}</div>
-            <Transition
-              as={Fragment}
-              show={isHover}
-              enter="transition ease-out duration-150"
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
-            >
-              <Popover.Panel
-                static
-                className="sub-menu absolute z-10 w-56 left-full pl-2 top-0"
-              >
-                <ul className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-white dark:ring-opacity-10 text-sm relative bg-white dark:bg-neutral-900 py-4 grid space-y-1">
-                  {item.children?.map((i) => {
-                    if (i.type) {
-                      return renderDropdownMenuNavlinkHasChild(i);
-                    } else {
-                      return (
-                        <li key={i.id} className="px-2">
-                          {renderDropdownMenuNavlink(i)}
-                        </li>
-                      );
-                    }
-                  })}
-                </ul>
-              </Popover.Panel>
-            </Transition>
-          </>
-        )}
-      </Popover>
+        <div>{renderDropdownMenuNavlink(item)}</div>
+        <Transition
+          as={Fragment}
+          show={isHover}
+          enter="transition ease-out duration-150"
+          enterFrom="opacity-0 translate-y-1"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition ease-in duration-150"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 translate-y-1"
+        >
+          <div
+            className="sub-menu absolute z-10 w-56 left-full pl-2 top-0"
+          >
+            <ul className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-white dark:ring-opacity-10 text-sm relative bg-white dark:bg-neutral-900 py-4 grid space-y-1">
+              {item.children?.map((i) => {
+                if (i.type) {
+                  return renderDropdownMenuNavlinkHasChild(i);
+                } else {
+                  return (
+                    <li key={i.id} className="px-2">
+                      {renderDropdownMenuNavlink(i)}
+                    </li>
+                  );
+                }
+              })}
+            </ul>
+          </div>
+        </Transition>
+      </li>
     );
   };
 
