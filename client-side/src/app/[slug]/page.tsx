@@ -97,7 +97,7 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
         console.log('Cars data:', data?.cars); // Отладка автомобилей
     } catch (err) {
         console.error('Error loading data:', err);
-        error = "Ошибка при загрузке данных";
+        error = "Ошибка при загрузке данных"; 
     }
 
     if (error) return <div>{error}</div>;
