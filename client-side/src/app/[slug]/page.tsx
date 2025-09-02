@@ -667,21 +667,14 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                             <div className="mt-6 bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-6">
                                 <h4 className="font-bold mb-4">Нужна помощь?</h4>
                                 <div className="space-y-3">
-                                    <a href="tel:+79781099992"
+                                    <a href="tel:+79890087999"
                                         className="flex items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200">
                                         <PhoneIcon className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
                                         <div>
-                                            <div className="font-medium text-green-800 dark:text-green-300">+7 (978) 109-99-92</div>
+                                            <div className="font-medium text-green-800 dark:text-green-300">+7 (989) 008-79-99</div>
                                             <div className="text-sm text-green-600 dark:text-green-400">Круглосуточно</div>
                                         </div>
                                     </a>
-                                    <div className="flex items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                                        <MapPinIcon className="w-5 h-5 text-blue-600 mr-3 flex-shrink-0" />
-                                        <div>
-                                            <div className="font-medium text-blue-800 dark:text-blue-300">г. Симферополь</div>
-                                            <div className="text-sm text-blue-600 dark:text-blue-400">ул. Ленина, 1</div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
