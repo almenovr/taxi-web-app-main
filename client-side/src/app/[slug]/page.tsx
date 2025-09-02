@@ -7,6 +7,32 @@ import Image from "next/image";
 import { MapPinIcon, ClockIcon, PhoneIcon, StarIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 
+// Добавляем базовые стили для анимаций
+const styles = `
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
+// Вставляем стили в head
+if (typeof document !== 'undefined') {
+  const styleSheet = document.createElement("style");
+  styleSheet.type = "text/css";
+  styleSheet.innerText = styles;
+  document.head.appendChild(styleSheet);
+}
+
 interface Car {
     id: number;
     className: string;
@@ -74,135 +100,148 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
     if (!data) return <div>Данные не найдены</div>;
 
     const converter = new Showdown.Converter();
-    const contentHTML = converter.makeHtml(data.description);
+    let contentHTML = "";
+    try {
+        contentHTML = converter.makeHtml(typeof data.description === 'string' ? data.description : "");
+    } catch (error) {
+        console.error('Error converting description:', error);
+        contentHTML = "";
+    }
     const cars = data.cars;
     const blocks = data.textBlock;
-    const htmlBlock = blocks?.map((block) => converter.makeHtml(block.body));
+    const htmlBlock = blocks?.map((block) => {
+        try {
+            return converter.makeHtml(typeof block.body === 'string' ? block.body : "");
+        } catch (error) {
+            console.error('Error converting block body:', error);
+            return "";
+        }
+    });
 
     const renderSection1 = () => (
         <div className="listingSection__wrap space-y-8">
+            {/* Breadcrumbs */}
+            <nav className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 mb-4">
+                <a href="/" className="hover:text-blue-600 transition-colors">Главная</a>
+                <span>/</span>
+                <span className="text-gray-900 dark:text-white font-medium">Маршруты</span>
+                <span>/</span>
+                <span className="text-gray-900 dark:text-white font-medium">{data?.title}</span>
+            </nav>
+
             {/* Hero Section */}
-            <div className="relative bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 overflow-hidden shadow-lg">
-                <div className="absolute top-0 right-0 w-20 h-20 sm:w-32 sm:h-32 bg-gray-100 dark:bg-neutral-800 rounded-full -translate-y-10 translate-x-10 sm:-translate-y-16 sm:translate-x-16"></div>
-                <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-gray-100 dark:bg-neutral-800 rounded-full translate-y-8 -translate-x-8 sm:translate-y-12 sm:-translate-x-12"></div>
+            <div className="relative bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-neutral-900 dark:to-gray-800 border border-gray-200 dark:border-neutral-700 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                <div className="absolute top-0 right-0 w-20 h-20 sm:w-32 sm:h-32 bg-gradient-to-br from-blue-200 to-purple-200 dark:from-blue-800 dark:to-purple-800 rounded-full -translate-y-10 translate-x-10 sm:-translate-y-16 sm:translate-x-16 opacity-20"></div>
+                <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-green-200 to-blue-200 dark:from-green-800 dark:to-blue-800 rounded-full translate-y-8 -translate-x-8 sm:translate-y-12 sm:-translate-x-12 opacity-20"></div>
                 <div className="relative z-10">
                     <div className="flex items-center justify-center mb-6 sm:mb-8">
-                        <div className="bg-gray-100 dark:bg-neutral-800 rounded-full p-2 sm:p-3 mr-3 sm:mr-4">
-                            <MapPinIcon className="w-6 h-6 sm:w-8 sm:h-8 text-gray-600 dark:text-gray-300" />
+                        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-full p-2 sm:p-3 mr-3 sm:mr-4 shadow-lg">
+                            <MapPinIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                         </div>
-                        <span className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-neutral-800 px-3 py-1 sm:px-4 sm:py-2 rounded-full">Маршрут</span>
+                        <span className="text-xs sm:text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900 px-3 py-1 sm:px-4 sm:py-2 rounded-full">Популярный маршрут</span>
                     </div>
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-center mb-6 sm:mb-8 leading-tight text-gray-900 dark:text-white px-2">{data?.title}</h1>
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-center mb-6 sm:mb-8 leading-tight text-gray-900 dark:text-white px-2 animate-fade-in">
+                        {data?.title}
+                    </h1>
                     <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-6 lg:space-x-8 text-base sm:text-lg">
-                        <div className="flex items-center bg-gray-100 dark:bg-neutral-800 rounded-full px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center">
-                            <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-gray-600 dark:text-gray-300" />
+                        <div className="flex items-center bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center shadow-md hover:shadow-lg transition-shadow">
+                            <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-green-600 dark:text-green-400" />
                             <span className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">От: {data?.cityOrigin}</span>
                         </div>
                         <div className="hidden sm:block">
-                            <div className="bg-gray-200 dark:bg-neutral-700 rounded-full p-2 sm:p-3">
-                                <svg className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                            <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-full p-2 sm:p-3 shadow-lg">
+                                <svg className="w-4 h-4 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                                 </svg>
                             </div>
                         </div>
-                        <div className="flex items-center bg-gray-100 dark:bg-neutral-800 rounded-full px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center">
-                            <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-gray-600 dark:text-gray-300" />
+                        <div className="flex items-center bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 rounded-full px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center shadow-md hover:shadow-lg transition-shadow">
+                            <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-purple-600 dark:text-purple-400" />
                             <span className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">До: {data?.cityWhen}</span>
                         </div>
                     </div>
                     <div className="text-center mt-6 sm:mt-8">
-                        <div className="inline-flex items-center bg-gray-100 dark:bg-neutral-800 rounded-full px-4 py-2 sm:px-6 text-xs sm:text-sm">
-                            <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2 text-gray-600 dark:text-gray-300" />
-                            <span className="text-gray-700 dark:text-gray-300">Примерное время в пути: 2-3 часа</span>
+                        <div className="inline-flex items-center bg-gradient-to-r from-orange-100 to-red-100 dark:from-orange-900 dark:to-red-900 rounded-full px-4 py-2 sm:px-6 text-xs sm:text-sm shadow-md">
+                            <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2 text-orange-600 dark:text-orange-400" />
+                            <span className="text-gray-700 dark:text-gray-300 font-medium">Примерное время в пути: 2-3 часа</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-4 sm:p-6 text-center">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                        <ClockIcon className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
-                    </div>
-                    <h3 className="font-semibold text-base sm:text-lg mb-2">Время в пути</h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">2-3 часа</p>
-                </div>
-                <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-4 sm:p-6 text-center">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                        <MapPinIcon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
-                    </div>
-                    <h3 className="font-semibold text-base sm:text-lg mb-2">Расстояние</h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">85-100 км</p>
-                </div>
-                <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-4 sm:p-6 text-center sm:col-span-2 lg:col-span-1">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 dark:bg-purple-800 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                        <PhoneIcon className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
-                    </div>
-                    <h3 className="font-semibold text-base sm:text-lg mb-2">Поддержка</h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">24/7</p>
-                </div>
-            </div>
 
             {/* Description Section */}
-            <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
+            <div className="bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-neutral-800 dark:via-neutral-900 dark:to-neutral-800 rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 border border-gray-200 dark:border-neutral-700 hover:shadow-xl transition-all duration-300">
                 <div className="text-center mb-6 sm:mb-8">
-                    <h2 className="text-2xl sm:text-3xl font-bold mb-4">О маршруте</h2>
-                    <div className="w-16 sm:w-24 border-b-2 border-blue-500 mx-auto" />
+                    <div className="inline-flex items-center justify-center mb-4">
+                        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-full p-2 mr-3">
+                            <MapPinIcon className="w-6 h-6 text-white" />
+                        </div>
+                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">О маршруте</h2>
+                    </div>
+                    <div className="w-16 sm:w-24 border-b-2 border-gradient-to-r from-blue-500 to-purple-600 mx-auto" />
                 </div>
-                <div
-                    id="single-entry-content"
-                    className="prose dark:prose-invert prose-base sm:prose-lg max-w-screen-lg mx-auto dark:prose-dark px-2 sm:px-0"
-                    dangerouslySetInnerHTML={{ __html: contentHTML }}
-                />
+                <div className="bg-white dark:bg-neutral-900 rounded-lg p-4 sm:p-6 shadow-inner">
+                    <div
+                        id="single-entry-content"
+                        className="prose dark:prose-invert prose-base sm:prose-lg max-w-screen-lg mx-auto dark:prose-dark px-2 sm:px-0 text-gray-700 dark:text-gray-300"
+                        dangerouslySetInnerHTML={{ __html: contentHTML }}
+                    />
+                </div>
             </div>
         </div>
     );
 
     const renderSection2 = (car: Car, cityOrigin: string, cityWhen: string) => {
         const { className, carImg, listCars, price, description, isBusiness, pricePerKm } = car;
-        const text = converter.makeHtml(description);
+        let text = "";
+        try {
+            text = converter.makeHtml(typeof description === 'string' ? description : "");
+        } catch (error) {
+            console.error('Error converting car description:', error);
+            text = "";
+        }
 
         if (!className) return null;
 
         return (
             <div className="listingSection__wrap group" key={car.id}>
                 {/* Header Card */}
-                <div className="bg-gradient-to-r from-green-50 via-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 mb-6 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white bg-opacity-10 rounded-full -translate-y-16 translate-x-16"></div>
-                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-white bg-opacity-10 rounded-full translate-y-12 -translate-x-12"></div>
+                <div className="bg-gradient-to-r from-green-50 via-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 mb-6 relative overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-200 to-blue-200 dark:from-green-800 dark:to-blue-800 rounded-full -translate-y-16 translate-x-16 opacity-20"></div>
+                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-purple-200 to-pink-200 dark:from-purple-800 dark:to-pink-800 rounded-full translate-y-12 -translate-x-12 opacity-20"></div>
                     <div className="relative z-10">
                         <div className="flex items-center justify-center mb-4 sm:mb-6 px-4">
                             {isBusiness ? (
-                                <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full p-2 sm:p-3 mr-3 sm:mr-4 flex-shrink-0">
+                                <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full p-2 sm:p-3 mr-3 sm:mr-4 flex-shrink-0 shadow-lg animate-pulse">
                                     <StarIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                                 </div>
                             ) : (
-                                <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-full p-2 sm:p-3 mr-3 sm:mr-4 flex-shrink-0">
+                                <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-full p-2 sm:p-3 mr-3 sm:mr-4 flex-shrink-0 shadow-lg">
                                     <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-full"></div>
                                 </div>
                             )}
                             <div className="text-center">
-                                <h3 className="text-2xl sm:text-3xl font-bold">{className}</h3>
+                                <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{className}</h3>
                                 {isBusiness && (
-                                    <span className="text-xs sm:text-sm bg-yellow-400 text-yellow-900 px-2 sm:px-3 py-1 rounded-full font-medium mt-1 inline-block">
+                                    <span className="text-xs sm:text-sm bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 sm:px-3 py-1 rounded-full font-medium mt-1 inline-block shadow-md">
                                         Премиум класс
                                     </span>
                                 )}
                             </div>
                         </div>
                         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm px-4">
-                            <div className="flex items-center bg-white bg-opacity-20 rounded-full px-3 sm:px-4 py-2">
-                                <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2 flex-shrink-0" />
-                                <span>~2-3 часа в пути</span>
+                            <div className="flex items-center bg-white bg-opacity-30 dark:bg-white dark:bg-opacity-10 rounded-full px-3 sm:px-4 py-2 shadow-sm hover:shadow-md transition-shadow">
+                                <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2 flex-shrink-0 text-green-600 dark:text-green-400" />
+                                <span className="text-gray-700 dark:text-gray-300">~2-3 часа в пути</span>
                             </div>
-                            <div className="flex items-center bg-white bg-opacity-20 rounded-full px-3 sm:px-4 py-2">
-                                <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2 flex-shrink-0" />
-                                <span>Круглосуточная поддержка</span>
+                            <div className="flex items-center bg-white bg-opacity-30 dark:bg-white dark:bg-opacity-10 rounded-full px-3 sm:px-4 py-2 shadow-sm hover:shadow-md transition-shadow">
+                                <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2 flex-shrink-0 text-blue-600 dark:text-blue-400" />
+                                <span className="text-gray-700 dark:text-gray-300">Круглосуточная поддержка</span>
                             </div>
-                            <div className="flex items-center bg-white bg-opacity-20 rounded-full px-3 sm:px-4 py-2">
-                                <MapPinIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2 flex-shrink-0" />
-                                <span>Трансфер до двери</span>
+                            <div className="flex items-center bg-white bg-opacity-30 dark:bg-white dark:bg-opacity-10 rounded-full px-3 sm:px-4 py-2 shadow-sm hover:shadow-md transition-shadow">
+                                <MapPinIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2 flex-shrink-0 text-purple-600 dark:text-purple-400" />
+                                <span className="text-gray-700 dark:text-gray-300">Трансфер до двери</span>
                             </div>
                         </div>
                     </div>
@@ -225,28 +264,52 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
 
                 {/* Additional Features */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-4 sm:mt-6">
-                    <div className="bg-white dark:bg-neutral-800 rounded-lg p-3 sm:p-4 shadow-md">
-                        <h4 className="font-semibold mb-2 flex items-center text-sm sm:text-base">
-                            <div className="w-2 h-2 bg-green-500 rounded-full mr-2 flex-shrink-0"></div>
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900 dark:to-emerald-900 rounded-lg p-3 sm:p-4 shadow-md hover:shadow-lg transition-all duration-300 border border-green-200 dark:border-green-800">
+                        <h4 className="font-semibold mb-3 flex items-center text-sm sm:text-base text-green-800 dark:text-green-200">
+                            <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mr-3 flex-shrink-0 shadow-sm"></div>
                             Включено в стоимость
                         </h4>
-                        <ul className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 space-y-1">
-                            <li>• Профессиональный водитель</li>
-                            <li>• Кондиционер</li>
-                            <li>• Аудиосистема</li>
-                            <li>• Бесплатная вода</li>
+                        <ul className="text-xs sm:text-sm text-green-700 dark:text-green-300 space-y-2">
+                            <li className="flex items-center">
+                                <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
+                                Профессиональный водитель
+                            </li>
+                            <li className="flex items-center">
+                                <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
+                                Кондиционер
+                            </li>
+                            <li className="flex items-center">
+                                <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
+                                Аудиосистема
+                            </li>
+                            <li className="flex items-center">
+                                <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
+                                Бесплатная вода
+                            </li>
                         </ul>
                     </div>
-                    <div className="bg-white dark:bg-neutral-800 rounded-lg p-3 sm:p-4 shadow-md">
-                        <h4 className="font-semibold mb-2 flex items-center text-sm sm:text-base">
-                            <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 flex-shrink-0"></div>
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 rounded-lg p-3 sm:p-4 shadow-md hover:shadow-lg transition-all duration-300 border border-blue-200 dark:border-blue-800">
+                        <h4 className="font-semibold mb-3 flex items-center text-sm sm:text-base text-blue-800 dark:text-blue-200">
+                            <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full mr-3 flex-shrink-0 shadow-sm"></div>
                             Дополнительные услуги
                         </h4>
-                        <ul className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 space-y-1">
-                            <li>• Детское кресло</li>
-                            <li>• Дополнительный багаж</li>
-                            <li>• Остановка по пути</li>
-                            <li>• Встреча с табличкой</li>
+                        <ul className="text-xs sm:text-sm text-blue-700 dark:text-blue-300 space-y-2">
+                            <li className="flex items-center">
+                                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 flex-shrink-0"></span>
+                                Детское кресло
+                            </li>
+                            <li className="flex items-center">
+                                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 flex-shrink-0"></span>
+                                Дополнительный багаж
+                            </li>
+                            <li className="flex items-center">
+                                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 flex-shrink-0"></span>
+                                Остановка по пути
+                            </li>
+                            <li className="flex items-center">
+                                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 flex-shrink-0"></span>
+                                Встреча с табличкой
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -256,32 +319,32 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
 
     const renderSection9 = (faqs: Destination["faqs"]) => (
         <div className="listingSection__wrap">
-            <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-20 h-20 sm:w-32 sm:h-32 bg-gray-100 dark:bg-neutral-800 rounded-full -translate-y-10 translate-x-10 sm:-translate-y-16 sm:translate-x-16"></div>
-                <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-gray-100 dark:bg-neutral-800 rounded-full translate-y-8 -translate-x-8 sm:translate-y-12 sm:-translate-x-12"></div>
+            <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900 dark:via-purple-900 dark:to-pink-900 border border-indigo-200 dark:border-indigo-700 rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 relative overflow-hidden shadow-lg">
+                <div className="absolute top-0 right-0 w-20 h-20 sm:w-32 sm:h-32 bg-gradient-to-br from-indigo-200 to-purple-200 dark:from-indigo-800 dark:to-purple-800 rounded-full -translate-y-10 translate-x-10 sm:-translate-y-16 sm:translate-x-16 opacity-20"></div>
+                <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-pink-200 to-purple-200 dark:from-pink-800 dark:to-purple-800 rounded-full translate-y-8 -translate-x-8 sm:translate-y-12 sm:-translate-x-12 opacity-20"></div>
                 <div className="relative z-10 text-center">
                     <div className="flex items-center justify-center mb-4 sm:mb-6">
-                        <div className="bg-gray-100 dark:bg-neutral-800 rounded-full p-3 sm:p-4 mr-3 sm:mr-4">
-                            <span className="text-gray-600 dark:text-gray-300 font-bold text-xl sm:text-2xl">?</span>
+                        <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full p-3 sm:p-4 mr-3 sm:mr-4 shadow-lg">
+                            <span className="text-white font-bold text-xl sm:text-2xl">?</span>
                         </div>
                         <div>
                             <h4 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Часто задаваемые вопросы</h4>
-                            <div className="w-16 sm:w-24 border-b-2 border-gray-300 dark:border-gray-600 mx-auto mt-2"></div>
+                            <div className="w-16 sm:w-24 border-b-2 border-gradient-to-r from-indigo-500 to-purple-600 mx-auto mt-2"></div>
                         </div>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg px-2">Ответы на популярные вопросы о поездке</p>
+                    <p className="text-indigo-700 dark:text-indigo-300 text-base sm:text-lg px-2 font-medium">Ответы на популярные вопросы о поездке</p>
                 </div>
             </div>
 
             <div className="space-y-4 sm:space-y-6">
                 {faqs?.map((faq, index) => (
-                    <div key={faq.id} className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 border-l-4 border-gray-300 dark:border-gray-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div key={faq.id} className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 border-l-4 border-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:border-l-8">
                         <div className="flex items-start">
-                            <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 dark:bg-neutral-700 rounded-full flex items-center justify-center mr-4 sm:mr-6 mt-1">
-                                <span className="text-gray-600 dark:text-gray-300 font-bold text-base sm:text-lg">{index + 1}</span>
+                            <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mr-4 sm:mr-6 mt-1 shadow-lg">
+                                <span className="text-white font-bold text-base sm:text-lg">{index + 1}</span>
                             </div>
                             <div className="flex-grow">
-                                <h5 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 leading-tight">
+                                <h5 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 leading-tight hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                     {faq.faqTitle}
                                 </h5>
                                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-base sm:text-lg">
@@ -322,26 +385,26 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
 
     const renderSection10 = (link: string) => (
         <div className="listingSection__wrap">
-            <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-20 h-20 sm:w-32 sm:h-32 bg-gray-100 dark:bg-neutral-800 rounded-full -translate-x-10 -translate-y-10 sm:-translate-x-16 sm:-translate-y-16"></div>
-                <div className="absolute bottom-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-gray-100 dark:bg-neutral-800 rounded-full translate-x-8 translate-y-8 sm:translate-x-12 sm:translate-y-12"></div>
+            <div className="bg-gradient-to-br from-green-50 via-blue-50 to-teal-50 dark:from-green-900 dark:via-blue-900 dark:to-teal-900 border border-green-200 dark:border-green-700 rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 relative overflow-hidden shadow-lg">
+                <div className="absolute top-0 left-0 w-20 h-20 sm:w-32 sm:h-32 bg-gradient-to-br from-green-200 to-blue-200 dark:from-green-800 dark:to-blue-800 rounded-full -translate-x-10 -translate-y-10 sm:-translate-x-16 sm:-translate-y-16 opacity-20"></div>
+                <div className="absolute bottom-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-teal-200 to-blue-200 dark:from-teal-800 dark:to-blue-800 rounded-full translate-x-8 translate-y-8 sm:translate-x-12 sm:translate-y-12 opacity-20"></div>
                 <div className="relative z-10 text-center">
                     <div className="flex items-center justify-center mb-4 sm:mb-6">
-                        <div className="bg-gray-100 dark:bg-neutral-800 rounded-full p-3 sm:p-4 mr-3 sm:mr-4">
-                            <MapPinIcon className="w-6 h-6 sm:w-8 sm:h-8 text-gray-600 dark:text-gray-300" />
+                        <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-full p-3 sm:p-4 mr-3 sm:mr-4 shadow-lg">
+                            <MapPinIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                         </div>
                         <div>
                             <h4 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Маршрут на карте</h4>
-                            <div className="w-16 sm:w-24 border-b-2 border-gray-300 dark:border-gray-600 mx-auto mt-2"></div>
+                            <div className="w-16 sm:w-24 border-b-2 border-gradient-to-r from-green-500 to-blue-600 mx-auto mt-2"></div>
                         </div>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg px-2">
+                    <p className="text-green-700 dark:text-green-300 text-base sm:text-lg px-2 font-medium">
                         Следите за маршрутом следования и ориентирами по пути
                     </p>
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl overflow-hidden">
+            <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
                 <iframe
                     src={link}
                     width="100%"
@@ -350,18 +413,18 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                     className="border-0"
                     loading="lazy"
                 />
-                <div className="p-3 sm:p-4 lg:p-6 bg-gray-50 dark:bg-neutral-700">
+                <div className="p-3 sm:p-4 lg:p-6 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-neutral-700 dark:to-neutral-800">
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
                         <div className="flex items-center">
                             <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 mr-2 flex-shrink-0" />
-                            <span className="font-medium text-sm sm:text-base">Интерактивная карта маршрута</span>
+                            <span className="font-medium text-sm sm:text-base text-gray-900 dark:text-white">Интерактивная карта маршрута</span>
                         </div>
                         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full sm:w-auto">
-                            <div className="flex items-center text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                            <div className="flex items-center text-xs sm:text-sm text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900 rounded-full px-3 py-1">
                                 <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" />
                                 <span>Обновляется в реальном времени</span>
                             </div>
-                            <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 sm:px-4 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-200 w-full sm:w-auto">
+                            <button className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-3 py-2 sm:px-4 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 w-full sm:w-auto shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                                 Открыть в новой вкладке
                             </button>
                         </div>
@@ -418,6 +481,72 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                 dangerouslySetInnerHTML={{ __html: block }}
             />
             <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+        </div>
+    );
+
+    const renderSection12 = () => (
+        <div className="listingSection__wrap">
+            <div className="bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 dark:from-yellow-900 dark:via-orange-900 dark:to-red-900 border border-yellow-200 dark:border-yellow-700 rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 relative overflow-hidden shadow-lg">
+                <div className="absolute top-0 right-0 w-20 h-20 sm:w-32 sm:h-32 bg-gradient-to-br from-yellow-200 to-orange-200 dark:from-yellow-800 dark:to-orange-800 rounded-full -translate-y-10 translate-x-10 sm:-translate-y-16 sm:translate-x-16 opacity-20"></div>
+                <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-red-200 to-orange-200 dark:from-red-800 dark:to-orange-800 rounded-full translate-y-8 -translate-x-8 sm:translate-y-12 sm:-translate-x-12 opacity-20"></div>
+                <div className="relative z-10 text-center">
+                    <div className="flex items-center justify-center mb-4 sm:mb-6">
+                        <div className="bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full p-3 sm:p-4 mr-3 sm:mr-4 shadow-lg">
+                            <StarIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                        </div>
+                        <div>
+                            <h4 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Отзывы клиентов</h4>
+                            <div className="w-16 sm:w-24 border-b-2 border-gradient-to-r from-yellow-500 to-orange-600 mx-auto mt-2"></div>
+                        </div>
+                    </div>
+                    <p className="text-yellow-700 dark:text-yellow-300 text-base sm:text-lg px-2 font-medium">Что говорят наши пассажиры</p>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {[
+                    {
+                        name: "Анна К.",
+                        rating: 5,
+                        text: "Отличная поездка! Водитель был пунктуален, машина чистая и комфортная. Рекомендую!",
+                        date: "2 недели назад"
+                    },
+                    {
+                        name: "Михаил С.",
+                        rating: 5,
+                        text: "Быстро и безопасно добрались до места назначения. Цена соответствует качеству.",
+                        date: "1 месяц назад"
+                    },
+                    {
+                        name: "Елена В.",
+                        rating: 5,
+                        text: "Профессиональный сервис. Водитель помог с багажом и был очень вежливым.",
+                        date: "3 недели назад"
+                    }
+                ].map((review, index) => (
+                    <div key={index} className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-4 sm:p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-neutral-700">
+                        <div className="flex items-center mb-3">
+                            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                                <span className="text-white font-bold text-sm">{review.name.charAt(0)}</span>
+                            </div>
+                            <div>
+                                <h5 className="font-semibold text-gray-900 dark:text-white">{review.name}</h5>
+                                <div className="flex items-center">
+                                    {[...Array(review.rating)].map((_, i) => (
+                                        <StarIcon key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-3">
+                            "{review.text}"
+                        </p>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                            {review.date}
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 
@@ -514,20 +643,19 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                         {htmlBlock?.map((block, index) => (
                             <div key={index}>{renderSection11(block)}</div>
                         ))}
+                        {renderSection12()}
                         {data.faqs.length ? renderSection9(data.faqs) : null}
                         {data.mapLink ? renderSection10(data.mapLink) : null}
                     </div>
 
                     {/* Mobile Sidebar */}
                     <div className="w-full space-y-6">
-                        {renderSidebarPrice()}
-
                         {/* Contact Info */}
                         <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-4 sm:p-6">
                             <h4 className="font-bold mb-4 text-center sm:text-left">Нужна помощь?</h4>
                             <div className="space-y-4">
                                 <a href="tel:+79781099992"
-                                   className="flex flex-col sm:flex-row items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200">
+                                    className="flex flex-col sm:flex-row items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200">
                                     <div className="flex items-center">
                                         <PhoneIcon className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
                                         <div className="text-center sm:text-left">
@@ -559,19 +687,18 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                         {htmlBlock?.map((block, index) => (
                             <div key={index}>{renderSection11(block)}</div>
                         ))}
+                        {renderSection12()}
                         {data.faqs.length ? renderSection9(data.faqs) : null}
                         {data.mapLink ? renderSection10(data.mapLink) : null}
                     </div>
                     <div className="flex-grow mt-10">
                         <div className="sticky top-28">
-                            {renderSidebarPrice()}
-
                             {/* Contact Info */}
                             <div className="mt-6 bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-6">
                                 <h4 className="font-bold mb-4">Нужна помощь?</h4>
                                 <div className="space-y-3">
                                     <a href="tel:+79781099992"
-                                       className="flex items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200">
+                                        className="flex items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200">
                                         <PhoneIcon className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
                                         <div>
                                             <div className="font-medium text-green-800 dark:text-green-300">+7 (978) 109-99-92</div>

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { FC } from "react";
 import { TaxonomyType } from "@/data/types";
 import Link from "next/link";
