@@ -180,38 +180,77 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
     </div>
   );
 
-  const renderStats = () => (
-    <div className="bg-gradient-to-r from-gray-50 to-blue-50 dark:from-neutral-800 dark:to-neutral-900 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">{routes.length}</div>
-            <div className="text-gray-600 dark:text-gray-300">Доступных направлений</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
-              {Math.min(...routes.map(r => r.price)).toLocaleString()} ₽
-            </div>
-            <div className="text-gray-600 dark:text-gray-300">Минимальная цена</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
-              {(routes.reduce((sum, r) => sum + r.rating, 0) / routes.length).toFixed(1)}
-            </div>
-            <div className="text-gray-600 dark:text-gray-300">Средний рейтинг</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-neutral-900">
       {renderHero()}
 
-      {renderStats()}
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* SEO Text Block */}
+        <div className="mt-16 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-neutral-800 dark:to-neutral-900 py-12 mb-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
+              Такси из {origin} - надежный трансфер по Крыму
+            </h3>
+
+            <div className="prose prose-lg dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+              <p className="text-lg leading-relaxed mb-6">
+                Заказать такси из {origin} в Крым - это удобно и безопасно с нашей компанией. Мы предоставляем качественные услуги пассажирских перевозок по маршрутам {origin} - Симферополь, {origin} - Ялта, {origin} - Севастополь и другие популярные направления.
+              </p>
+
+              <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Преимущества заказа у нас:</h4>
+
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-start">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <span><strong>Опытные водители:</strong> Все наши водители имеют большой опыт работы и отлично знают дороги Крыма</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <span><strong>Современный автопарк:</strong> Комфортные автомобили различных классов с кондиционером и Wi-Fi</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="w-2 h-2 bg-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <span><strong>Фиксированные цены:</strong> Стоимость поездки не изменится в пути, оплата только по факту</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <span><strong>Круглосуточная поддержка:</strong> Наша служба работает 24/7 для решения любых вопросов</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="w-2 h-2 bg-red-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                  <span><strong>Безопасность:</strong> Регулярный осмотр автомобилей и проверка водителей</span>
+                </li>
+              </ul>
+
+              <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Как добраться из {origin} в Крым:</h4>
+
+              <p className="mb-4">
+                Самый удобный способ путешествия из {origin} в Крым - это заказать трансфер с нашей компанией. Мы встречаем вас в аэропорту или на вокзале {origin}, обеспечиваем комфортную поездку через Керченский мост и доставляем прямо к месту назначения.
+              </p>
+
+              <p className="mb-6">
+                Время в пути из {origin} до основных городов Крыма составляет от 4 до 8 часов в зависимости от выбранного маршрута и условий движения. Мы учитываем все особенности трассы и выбираем оптимальное время отправления.
+              </p>
+
+              <div className="bg-white dark:bg-neutral-700 p-6 rounded-lg shadow-sm">
+                <h5 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Полезная информация:</h5>
+                <ul className="space-y-2 text-sm">
+                  <li>• Документы: Паспорт или водительское удостоверение</li>
+                  <li>• Оплата: Наличными или банковской картой</li>
+                  <li>• Багаж: До 2-х мест багажа бесплатно</li>
+                  <li>• Дети: Предоставляем детские кресла по запросу</li>
+                  <li>• Животные: Перевозка домашних животных по согласованию</li>
+                </ul>
+              </div>
+
+              <p className="mt-6 text-center text-gray-600 dark:text-gray-400">
+                <strong>Заказать такси из {origin}</strong> - это гарантия комфортного и безопасного путешествия в Крым!
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             Доступные направления из {origin}
@@ -225,7 +264,7 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
           {routes.map(renderRouteCard)}
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center">
           <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-lg p-8 max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
               Не нашли подходящее направление?

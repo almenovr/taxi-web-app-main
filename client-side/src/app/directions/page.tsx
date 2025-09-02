@@ -151,34 +151,6 @@ const DirectionsPage: FC = () => {
     </div>
   );
 
-  const renderStats = () => (
-    <div className="bg-gradient-to-r from-gray-50 via-blue-50 to-indigo-50 dark:from-neutral-800 dark:to-neutral-900 py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="text-center">
-            <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">{originCities.length}</div>
-            <div className="text-gray-600 dark:text-gray-300">Города отправления</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">
-              {originCities.reduce((sum, city) => sum + city.availableRoutes, 0)}
-            </div>
-            <div className="text-gray-600 dark:text-gray-300">Всего маршрутов</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">
-              {originCities.filter(city => city.popular).length}
-            </div>
-            <div className="text-gray-600 dark:text-gray-300">Популярных направлений</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl font-bold text-orange-600 dark:text-orange-400 mb-2">24/7</div>
-            <div className="text-gray-600 dark:text-gray-300">Работаем круглосуточно</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   const renderPopularRoutes = () => (
     <div className="bg-white dark:bg-neutral-800 py-16">
@@ -224,9 +196,81 @@ const DirectionsPage: FC = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-neutral-900">
       {renderHero()}
 
-      {renderStats()}
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* SEO Text Block */}
+        <div className="bg-white dark:bg-neutral-800 py-16 mb-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
+                Заказать такси из любого города России
+              </h2>
+
+              <div className="prose prose-lg dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+                <p className="text-lg leading-relaxed mb-6">
+                  Наша компания предоставляет услуги трансфера и такси по всей территории России. Мы осуществляем пассажирские перевозки из Москвы, Санкт-Петербурга, Ростова-на-Дону, Краснодара, Воронежа, Волгограда и других городов в Крым, Кавказ и популярные курортные зоны.
+                </p>
+
+                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Почему выбирают нас?</h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 p-6 rounded-lg">
+                    <h4 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">Надежность и безопасность</h4>
+                    <p className="text-blue-800 dark:text-blue-200">
+                      Все наши водители проходят тщательную проверку, автомобили регулярно обслуживаются и соответствуют высоким стандартам безопасности.
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900 dark:to-emerald-900 p-6 rounded-lg">
+                    <h4 className="text-lg font-semibold text-green-900 dark:text-green-100 mb-3">Фиксированные цены</h4>
+                    <p className="text-green-800 dark:text-green-200">
+                      Стоимость поездки фиксируется при заказе и не меняется в зависимости от пробок, времени суток или других факторов.
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900 dark:to-pink-900 p-6 rounded-lg">
+                    <h4 className="text-lg font-semibold text-purple-900 dark:text-purple-100 mb-3">Комфортные автомобили</h4>
+                    <p className="text-purple-800 dark:text-purple-200">
+                      В нашем автопарке только современные автомобили различных классов: от эконом до VIP с повышенным комфортом.
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900 dark:to-red-900 p-6 rounded-lg">
+                    <h4 className="text-lg font-semibold text-orange-900 dark:text-orange-100 mb-3">Круглосуточная поддержка</h4>
+                    <p className="text-orange-800 dark:text-orange-200">
+                      Наша служба поддержки работает 24/7 и готова помочь вам в любое время суток с заказом или вопросами.
+                    </p>
+                  </div>
+                </div>
+
+                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Популярные направления</h3>
+                <p className="mb-6">
+                  Мы осуществляем регулярные рейсы по самым востребованным маршрутам: Москва - Крым, Санкт-Петербург - Сочи, Ростов - Симферополь, Краснодар - Ялта и многие другие. Каждый маршрут тщательно спланирован для максимального комфорта пассажиров.
+                </p>
+
+                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Как заказать такси?</h3>
+                <ol className="list-decimal list-inside space-y-2 mb-6">
+                  <li>Выберите город отправления на этой странице</li>
+                  <li>Ознакомьтесь с доступными направлениями и ценами</li>
+                  <li>Выберите подходящий маршрут и нажмите "Выбрать"</li>
+                  <li>Заполните форму заказа с контактными данными</li>
+                  <li>Оплатите поездку удобным способом</li>
+                  <li>Получите подтверждение и информацию о трансфере</li>
+                </ol>
+
+                <div className="bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-blue-900 p-6 rounded-lg mt-8">
+                  <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">Гарантии и условия</h4>
+                  <p className="text-gray-700 dark:text-gray-300 mb-4">
+                    Мы гарантируем своевременную подачу автомобиля, вежливых и опытных водителей, чистые и исправные автомобили. В случае любых проблем наша служба поддержки решит вопрос в кратчайшие сроки.
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    * Цены указаны за поездку в одну сторону. Для обратного трансфера предусмотрены специальные тарифы. Точную стоимость и условия можно уточнить при заказе.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             Выберите город отправления
