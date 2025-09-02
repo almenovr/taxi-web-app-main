@@ -230,10 +230,6 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                         </div>
                         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm px-4">
                             <div className="flex items-center bg-white bg-opacity-30 dark:bg-white dark:bg-opacity-10 rounded-full px-3 sm:px-4 py-2 shadow-sm hover:shadow-md transition-shadow">
-                                <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2 flex-shrink-0 text-green-600 dark:text-green-400" />
-                                <span className="text-gray-700 dark:text-gray-300">~2-3 часа в пути</span>
-                            </div>
-                            <div className="flex items-center bg-white bg-opacity-30 dark:bg-white dark:bg-opacity-10 rounded-full px-3 sm:px-4 py-2 shadow-sm hover:shadow-md transition-shadow">
                                 <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2 flex-shrink-0 text-blue-600 dark:text-blue-400" />
                                 <span className="text-gray-700 dark:text-gray-300">Круглосуточная поддержка</span>
                             </div>
@@ -280,10 +276,6 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
                                 Аудиосистема
                             </li>
-                            <li className="flex items-center">
-                                <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
-                                Бесплатная вода
-                            </li>
                         </ul>
                     </div>
                     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 rounded-lg p-3 sm:p-4 shadow-md hover:shadow-lg transition-all duration-300 border border-blue-200 dark:border-blue-800">
@@ -303,10 +295,6 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                             <li className="flex items-center">
                                 <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 flex-shrink-0"></span>
                                 Остановка по пути
-                            </li>
-                            <li className="flex items-center">
-                                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 flex-shrink-0"></span>
-                                Встреча с табличкой
                             </li>
                         </ul>
                     </div>
