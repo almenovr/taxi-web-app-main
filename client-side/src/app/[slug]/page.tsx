@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import ButtonPrimary from "@/shared/ButtonPrimary";
 import PropertyCardH from "@/components/PropertyCardH";
 import Showdown from "showdown";
-import {Metadata} from "next";
+import {Metadata} from "next"; 
 import Image from "next/image";
 import { MapPinIcon, ClockIcon, PhoneIcon, StarIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
