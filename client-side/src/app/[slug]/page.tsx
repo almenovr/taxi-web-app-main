@@ -124,14 +124,7 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
 
     const renderSection1 = () => (
         <div className="listingSection__wrap space-y-8">
-            {/* Breadcrumbs */}
-            <nav className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 mb-4">
-                <a href="/" className="hover:text-blue-600 transition-colors">Главная</a>
-                <span>/</span>
-                <span className="text-gray-900 dark:text-white font-medium">Маршруты</span>
-                <span>/</span>
-                <span className="text-gray-900 dark:text-white font-medium">{data?.title}</span>
-            </nav>
+            
 
             {/* Hero Section */}
             <div className="relative bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-neutral-900 dark:to-gray-800 border border-gray-200 dark:border-neutral-700 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
@@ -355,10 +348,10 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg mb-4 sm:mb-6 px-2">Наша служба поддержки готова помочь вам 24/7</p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-                    <a href="tel:+79781099992"
+                    <a href="tel:+79890087999"
                        className="flex items-center bg-green-100 dark:bg-green-800 rounded-full px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center hover:bg-green-200 dark:hover:bg-green-700 transition-colors duration-200">
                         <PhoneIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-green-600 dark:text-green-300" />
-                        <span className="font-medium text-green-800 dark:text-green-200 text-sm sm:text-base">+7 (978) 109-99-92</span>
+                        <span className="font-medium text-green-800 dark:text-green-200 text-sm sm:text-base">+7 (989) 008-79-99</span>
                     </a>
                     <div className="flex items-center bg-gray-100 dark:bg-neutral-800 rounded-full px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center">
                         <ClockIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-gray-600 dark:text-gray-300" />
@@ -640,26 +633,17 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                         <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-4 sm:p-6">
                             <h4 className="font-bold mb-4 text-center sm:text-left">Нужна помощь?</h4>
                             <div className="space-y-4">
-                                <a href="tel:+79781099992"
+                                <a href="tel:+79890087999"
                                     className="flex flex-col sm:flex-row items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200">
                                     <div className="flex items-center">
                                         <PhoneIcon className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
                                         <div className="text-center sm:text-left">
-                                            <div className="font-medium text-green-800 dark:text-green-300">+7 (978) 109-99-92</div>
+                                            <div className="font-medium text-green-800 dark:text-green-300">+7 (989) 008-79-99</div>
                                             <div className="text-sm text-green-600 dark:text-green-400">Круглосуточно</div>
                                         </div>
                                     </div>
                                     <div className="text-xs text-green-600 dark:text-green-400 font-medium sm:hidden">Нажмите для звонка</div>
                                 </a>
-                                <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                                    <div className="flex items-center">
-                                        <MapPinIcon className="w-5 h-5 text-blue-600 mr-3 flex-shrink-0" />
-                                        <div className="text-center sm:text-left">
-                                            <div className="font-medium text-blue-800 dark:text-blue-300">г. Симферополь</div>
-                                            <div className="text-sm text-blue-600 dark:text-blue-400">ул. Ленина, 1</div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
