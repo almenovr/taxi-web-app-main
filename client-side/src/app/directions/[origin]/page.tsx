@@ -1,93 +1,164 @@
-import React, { FC } from "react";
+"use client";
+
+import React, { FC, useEffect, useState } from "react";
 import ButtonPrimary from "@/shared/ButtonPrimary";
 import { MapPinIcon, ClockIcon, CurrencyDollarIcon, StarIcon, ArrowRightIcon, PhoneIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
 
 interface Route {
-  id: string;
-  destination: string;
-  distance: string;
-  duration: string;
-  price: number;
-  description: string;
-  image: string;
-  rating: number;
-  popular?: boolean;
+  id: number;
+  attributes: {
+    destination: string;
+    distance: string;
+    duration: string;
+    price: number;
+    description: string;
+    image: {
+      data: {
+        attributes: {
+          url: string;
+        };
+      };
+    };
+    rating: number;
+    popular?: boolean;
+    slug: string;
+  };
 }
 
 interface OriginPageProps {
   params: { origin: string };
 }
 
+interface CityData {
+  id: number;
+  title: string;
+  text: string;
+  city: {
+      name: string;
+    }
+  attributes: {
+    name: string;
+  
+    region: string;
+    availableRoutes: number;
+    popular: boolean;
+    image: {
+      data: {
+        attributes: {
+          url: string;
+        };
+      };
+    };
+    
+    description: string;
+    slug: string;
+  };
+}
+
 const OriginPage: FC<OriginPageProps> = ({ params }) => {
   const origin = decodeURIComponent(params.origin);
+  const [routes, setRoutes] = useState<Route[]>([]);
+  const [cityData, setCityData] = useState<CityData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Моковые данные маршрутов из Ростова
-  const routes: Route[] = [
-    {
-      id: "rostov-simferopol",
-      destination: "Симферополь",
-      distance: "320 км",
-      duration: "5-6 часов",
-      price: 4500,
-      description: "Популярный маршрут в столицу Крыма через Керченский мост",
-      image: "/placeholder-car.jpg",
-      rating: 4.8,
-      popular: true
-    },
-    {
-      id: "rostov-sevastopol",
-      destination: "Севастополь",
-      distance: "380 км",
-      duration: "6-7 часов",
-      price: 5200,
-      description: "Путешествие к Черному морю с остановками в живописных местах",
-      image: "/placeholder-car.jpg",
-      rating: 4.7
-    },
-    {
-      id: "rostov-yalta",
-      destination: "Ялта",
-      distance: "420 км",
-      duration: "7-8 часов",
-      price: 5800,
-      description: "Маршрут к курортной жемчужине Крыма",
-      image: "/placeholder-car.jpg",
-      rating: 4.9,
-      popular: true
-    },
-    {
-      id: "rostov-feodosia",
-      destination: "Феодосия",
-      distance: "350 км",
-      duration: "6 часов",
-      price: 4800,
-      description: "Путь к древнему городу с богатой историей",
-      image: "/placeholder-car.jpg",
-      rating: 4.6
-    },
-    {
-      id: "rostov-kerch",
-      destination: "Керчь",
-      distance: "280 км",
-      duration: "4-5 часов",
-      price: 3800,
-      description: "Маршрут к восточным воротам Крыма",
-      image: "/placeholder-car.jpg",
-      rating: 4.5
-    },
-    {
-      id: "rostov-evpatoria",
-      destination: "Евпатория",
-      distance: "360 км",
-      duration: "6-7 часов",
-      price: 4900,
-      description: "Путешествие к детской здравнице Крыма",
-      image: "/placeholder-car.jpg",
-      rating: 4.7
-    }
-  ];
+  useEffect(() => {
+    const fetchRoutes = async () => {
+      try {
+        setLoading(true);
+        // Получаем данные города по slug
+        const cityResponse = await axios.get(`https://strapi-production-5b34.up.railway.app/api/main-cities?filters[slug][$eq]=${params.origin}&populate=*`);
+        const fetchedCityData = cityResponse.data.data[0];
+
+        if (fetchedCityData) {
+          // Сохраняем данные города для использования в компоненте
+          setCityData(fetchedCityData);
+
+          
+          console.log('test', fetchedCityData);
+        
+          // Здесь можно получить маршруты для этого города
+          // Пока используем моковые данные, но структура соответствует API
+          const mockRoutes: Route[] = [
+            {
+              id: 1,
+              attributes: {
+                destination: "Симферополь",
+                distance: "320 км",
+                duration: "5-6 часов",
+                price: 4500,
+                description: "Популярный маршрут в столицу Крыма через Керченский мост",
+                image: {
+                  data: {
+                    attributes: {
+                      url: "/placeholder-car.jpg"
+                    }
+                  }
+                },
+                rating: 4.8,
+                popular: true,
+                slug: "simferopol"
+              }
+            },
+            {
+              id: 2,
+              attributes: {
+                destination: "Севастополь",
+                distance: "380 км",
+                duration: "6-7 часов",
+                price: 5200,
+                description: "Путешествие к Черному морю с остановками в живописных местах",
+                image: {
+                  data: {
+                    attributes: {
+                      url: "/placeholder-car.jpg"
+                    }
+                  }
+                },
+                rating: 4.7,
+                popular: false,
+                slug: "sevastopol"
+              }
+            },
+            {
+              id: 3,
+              attributes: {
+                destination: "Ялта",
+                distance: "420 км",
+                duration: "7-8 часов",
+                price: 5800,
+                description: "Маршрут к курортной жемчужине Крыма",
+                image: {
+                  data: {
+                    attributes: {
+                      url: "/placeholder-car.jpg"
+                    }
+                  }
+                },
+                rating: 4.9,
+                popular: true,
+                slug: "yalta"
+              }
+            }
+          ];
+          setRoutes(mockRoutes);
+        } else {
+          setError('Город не найден');
+        }
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching routes:', err);
+        setError('Не удалось загрузить маршруты');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRoutes();
+  }, [params.origin]);
 
   const renderHero = () => (
     <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white">
@@ -98,7 +169,9 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
             <div className="bg-white bg-opacity-20 rounded-full p-3 mr-4">
               <MapPinIcon className="w-8 h-8" />
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold">Из {origin}</h1>
+            <h1 className="text-4xl sm:text-5xl font-bold">
+              {cityData?.title}
+            </h1>
           </div>
           <p className="text-xl sm:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
             Выберите направление и забронируйте комфортный трансфер
@@ -130,11 +203,11 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center text-white">
               <MapPinIcon className="w-12 h-12 mx-auto mb-2" />
-              <h3 className="text-xl font-bold">{route.destination}</h3>
+              <h3 className="text-xl font-bold">{route.attributes.destination}</h3>
             </div>
           </div>
         </div>
-        {route.popular && (
+        {route.attributes.popular && (
           <div className="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
             Популярное
           </div>
@@ -143,33 +216,33 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
 
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">{route.destination}</h3>
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white">{route.attributes.destination}</h3>
           <div className="flex items-center text-yellow-400">
             <StarIcon className="w-5 h-5 fill-current" />
-            <span className="ml-1 text-sm font-medium text-gray-700 dark:text-gray-300">{route.rating}</span>
+            <span className="ml-1 text-sm font-medium text-gray-700 dark:text-gray-300">{route.attributes.rating}</span>
           </div>
         </div>
 
         <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 leading-relaxed">
-          {route.description}
+          {route.attributes.description}
         </p>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
             <MapPinIcon className="w-4 h-4 mr-2 text-blue-500" />
-            <span>{route.distance}</span>
+            <span>{route.attributes.distance}</span>
           </div>
           <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
             <ClockIcon className="w-4 h-4 mr-2 text-green-500" />
-            <span>{route.duration}</span>
+            <span>{route.attributes.duration}</span>
           </div>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-            от {route.price.toLocaleString()} ₽
+            от {route.attributes.price.toLocaleString()} ₽
           </div>
-          <Link href={`/${origin.toLowerCase()}-${route.destination.toLowerCase().replace(/\s+/g, '-')}`}>
+          <Link href={`/${origin.toLowerCase()}-${route.attributes.slug}`}>
             <ButtonPrimary className="flex items-center">
               Выбрать
               <ArrowRightIcon className="w-4 h-4 ml-2" />
@@ -190,79 +263,45 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
         <div className="mt-16 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-neutral-800 dark:to-neutral-900 py-12 mb-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
-              Такси из {origin} - надежный трансфер по Крыму
+              Такси из {cityData?.city?.name} - надежный трансфер
             </h3>
 
             <div className="prose prose-lg dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
               <p className="text-lg leading-relaxed mb-6">
-                Заказать такси из {origin} в Крым - это удобно и безопасно с нашей компанией. Мы предоставляем качественные услуги пассажирских перевозок по маршрутам {origin} - Симферополь, {origin} - Ялта, {origin} - Севастополь и другие популярные направления.
+                {cityData?.text}
               </p>
 
-              <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Преимущества заказа у нас:</h4>
-
-              <ul className="space-y-3 mb-6">
-                <li className="flex items-start">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                  <span><strong>Опытные водители:</strong> Все наши водители имеют большой опыт работы и отлично знают дороги Крыма</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                  <span><strong>Современный автопарк:</strong> Комфортные автомобили различных классов с кондиционером и Wi-Fi</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="w-2 h-2 bg-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                  <span><strong>Фиксированные цены:</strong> Стоимость поездки не изменится в пути, оплата только по факту</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                  <span><strong>Круглосуточная поддержка:</strong> Наша служба работает 24/7 для решения любых вопросов</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="w-2 h-2 bg-red-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                  <span><strong>Безопасность:</strong> Регулярный осмотр автомобилей и проверка водителей</span>
-                </li>
-              </ul>
-
-              <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Как добраться из {origin} в Крым:</h4>
-
-              <p className="mb-4">
-                Самый удобный способ путешествия из {origin} в Крым - это заказать трансфер с нашей компанией. Мы встречаем вас в аэропорту или на вокзале {origin}, обеспечиваем комфортную поездку через Керченский мост и доставляем прямо к месту назначения.
-              </p>
-
-              <p className="mb-6">
-                Время в пути из {origin} до основных городов Крыма составляет от 4 до 8 часов в зависимости от выбранного маршрута и условий движения. Мы учитываем все особенности трассы и выбираем оптимальное время отправления.
-              </p>
-
-              <div className="bg-white dark:bg-neutral-700 p-6 rounded-lg shadow-sm">
-                <h5 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Полезная информация:</h5>
-                <ul className="space-y-2 text-sm">
-                  <li>• Документы: Паспорт или водительское удостоверение</li>
-                  <li>• Оплата: Наличными или банковской картой</li>
-                  <li>• Багаж: До 2-х мест багажа бесплатно</li>
-                  <li>• Дети: Предоставляем детские кресла по запросу</li>
-                  <li>• Животные: Перевозка домашних животных по согласованию</li>
-                </ul>
-              </div>
-
-              <p className="mt-6 text-center text-gray-600 dark:text-gray-400">
-                <strong>Заказать такси из {origin}</strong> - это гарантия комфортного и безопасного путешествия в Крым!
-              </p>
             </div>
           </div>
         </div>
 
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Доступные направления из {origin}
+            Доступные направления из {cityData ? cityData?.city.name : origin}
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Выберите удобное направление и мы организуем комфортный трансфер
-          </p>
+         
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {routes.map(renderRouteCard)}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <span className="ml-3 text-gray-600 dark:text-gray-300">Загрузка маршрутов...</span>
+          </div>
+        ) : error ? (
+          <div className="text-center py-16">
+            <div className="text-red-500 text-lg mb-4">❌ {error}</div>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              Попробовать снова
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {routes.map(renderRouteCard)}
+          </div>
+        )}
 
         <div className="text-center">
           <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-lg p-8 max-w-2xl mx-auto">

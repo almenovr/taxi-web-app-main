@@ -34,13 +34,65 @@
 
 ## Данные
 
-### Города отправления
-- Ростов-на-Дону (12 маршрутов)
-- Краснодар (8 маршрутов)
-- Москва (15 маршрутов)
-- Воронеж (6 маршрутов)
-- Волгоград (5 маршрутов)
-- Ставрополь (7 маршрутов)
+### Источник данных
+Данные городов и маршрутов получаются динамически из API: `https://strapi-production-5b34.up.railway.app/api/main-cities`
+
+### Структура данных города
+Каждый город содержит:
+- `name` - название города
+- `region` - регион/область
+- `availableRoutes` - количество доступных маршрутов
+- `popular` - флаг популярности города
+- `image` - изображение города
+- `description` - описание города
+- `slug` - URL slug для маршрутизации
+
+### Структура данных маршрута
+Каждый маршрут содержит:
+- `destination` - пункт назначения
+- `distance` - расстояние
+- `duration` - время в пути
+- `price` - стоимость поездки
+- `description` - описание маршрута
+- `image` - изображение маршрута
+- `rating` - рейтинг маршрута
+- `popular` - флаг популярности маршрута
+- `slug` - URL slug для маршрутизации
+
+## Использование данных города
+
+На странице города (`/directions/[origin]`) данные города используются для:
+
+### Динамический контент:
+- **Заголовок**: `Из {cityData.attributes.name} ({cityData.attributes.region})`
+- **Описание**: Используется `cityData.attributes.description` из API
+- **Количество маршрутов**: `У нас {cityData.attributes.availableRoutes} маршрутов`
+
+### Примеры использования:
+```typescript
+// В заголовке
+<h1>Из {cityData?.attributes.name || origin}</h1>
+
+// В описании
+<p>{cityData?.attributes.description}</p>
+
+// В статистике
+<p>У нас {cityData?.attributes.availableRoutes} маршрутов</p>
+```
+
+### Состояние данных:
+```typescript
+const [cityData, setCityData] = useState<CityData | null>(null);
+```
+
+### Получение данных:
+```typescript
+const cityResponse = await axios.get(
+  `https://strapi-production-5b34.up.railway.app/api/main-cities?filters[slug][$eq]=${params.origin}&populate=*`
+);
+const fetchedCityData = cityResponse.data.data[0];
+setCityData(fetchedCityData);
+```
 
 ### Популярные маршруты
 - Ростов → Симферополь

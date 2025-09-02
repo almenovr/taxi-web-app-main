@@ -1,75 +1,54 @@
-import React, { FC } from "react";
+"use client";
+
+import React, { FC, useEffect, useState } from "react";
 import ButtonPrimary from "@/shared/ButtonPrimary";
 import { MapPinIcon, ArrowRightIcon, StarIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import axios from "axios";
 
 interface OriginCity {
-  id: string;
-  name: string;
-  region: string;
-  availableRoutes: number;
-  popular: boolean;
-  image: string;
-  description: string;
+  id: number;
+  attributes: {
+    name: string;
+    region: string;
+    availableRoutes: number;
+    popular: boolean;
+    image: {
+      data: {
+        attributes: {
+          url: string;
+        };
+      };
+    };
+    description: string;
+    slug: string;
+  };
 }
 
 const DirectionsPage: FC = () => {
-  const originCities: OriginCity[] = [
-    {
-      id: "rostov",
-      name: "Ростов-на-Дону",
-      region: "Ростовская область",
-      availableRoutes: 12,
-      popular: true,
-      image: "/placeholder-car.jpg",
-      description: "Основной транспортный хаб для поездок в Крым"
-    },
-    {
-      id: "krasnodar",
-      name: "Краснодар",
-      region: "Краснодарский край",
-      availableRoutes: 8,
-      popular: true,
-      image: "/placeholder-car.jpg",
-      description: "Удобный старт для путешествий по югу России"
-    },
-    {
-      id: "voronezh",
-      name: "Воронеж",
-      region: "Воронежская область",
-      availableRoutes: 6,
-      popular: false,
-      image: "/placeholder-car.jpg",
-      description: "Центральный регион с хорошей транспортной развязкой"
-    },
-    {
-      id: "volgograd",
-      name: "Волгоград",
-      region: "Волгоградская область",
-      availableRoutes: 5,
-      popular: false,
-      image: "/placeholder-car.jpg",
-      description: "Промышленный центр с развитой инфраструктурой"
-    },
-    {
-      id: "stavropol",
-      name: "Ставрополь",
-      region: "Ставропольский край",
-      availableRoutes: 7,
-      popular: false,
-      image: "/placeholder-car.jpg",
-      description: "Ворота Кавказа с множеством туристических маршрутов"
-    },
-    {
-      id: "moscow",
-      name: "Москва",
-      region: "Московская область",
-      availableRoutes: 15,
-      popular: true,
-      image: "/placeholder-car.jpg",
-      description: "Столица России с максимальным выбором направлений"
-    }
-  ];
+  const [originCities, setOriginCities] = useState<OriginCity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('https://strapi-production-5b34.up.railway.app/api/main-cities?populate=*');
+        console.log('test');
+        console.log(response);
+        setOriginCities(response.data.data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching cities:', err);
+        setError('Не удалось загрузить данные городов');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCities();
+  }, []);
 
   const renderHero = () => (
     <div className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-700 text-white overflow-hidden">
@@ -83,7 +62,7 @@ const DirectionsPage: FC = () => {
             <div className="bg-white bg-opacity-20 rounded-full p-4 mr-4">
               <MapPinIcon className="w-10 h-10" />
             </div>
-            <h1 className="text-5xl sm:text-6xl font-bold">Направления</h1>
+            <h1 className="text-5xl sm:text-6xl font-bold">Направлениt</h1>
           </div>
           <p className="text-xl sm:text-2xl text-indigo-100 mb-8 max-w-3xl mx-auto">
             Выберите город отправления и найдите идеальный маршрут для вашего путешествия
@@ -115,32 +94,32 @@ const DirectionsPage: FC = () => {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center text-white">
               <MapPinIcon className="w-16 h-16 mx-auto mb-3 text-white drop-shadow-lg" />
-              <h3 className="text-2xl font-bold drop-shadow-lg">{city.name}</h3>
-              <p className="text-sm opacity-90 drop-shadow">{city.region}</p>
+              <h3 className="text-2xl font-bold drop-shadow-lg">{city.attributes.name}</h3>
+              <p className="text-sm opacity-90 drop-shadow">{city.attributes.region}</p>
             </div>
           </div>
         </div>
-        {city.popular && (
+        {city.attributes.popular && (
           <div className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
             Популярное
           </div>
         )}
         <div className="absolute bottom-4 left-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm font-medium">
-          {city.availableRoutes} маршрутов
+          {city.attributes.availableRoutes} маршрутов
         </div>
       </div>
 
       <div className="p-6">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{city.name}</h3>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{city.attributes.name}</h3>
         <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 leading-relaxed">
-          {city.description}
+          {city.attributes.description}
         </p>
 
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            {city.availableRoutes} доступных направлений
+            {city.attributes.availableRoutes} доступных направлений
           </div>
-          <Link href={`/directions/${city.id}`}>
+          <Link href={`/directions/${city.attributes.slug}`}>
             <ButtonPrimary className="flex items-center group/btn">
               Выбрать
               <ArrowRightIcon className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
@@ -280,14 +259,35 @@ const DirectionsPage: FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {originCities.map(renderCityCard)}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <span className="ml-3 text-gray-600 dark:text-gray-300">Загрузка городов...</span>
+          </div>
+        ) : error ? (
+          <div className="text-center py-16">
+            <div className="text-red-500 text-lg mb-4">❌ {error}</div>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              Попробовать снова
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {originCities.map(renderCityCard)}
+          </div>
+        )}
       </div>
 
       {renderPopularRoutes()}
 
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16">
+      {/* Spacer for better separation */}
+      <div className="h-20"></div>
+
+      {/* Contact Section */}
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16 mt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">
             Не нашли свой город?
