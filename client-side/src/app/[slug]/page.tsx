@@ -47,8 +47,12 @@ interface Car {
 interface Destination {
     title: string;
     description: string;
-    cityOrigin: string;
-    cityWhen: string;
+    cityOrigin: {
+        name: string;
+    };
+    cityWhen: {
+        name: string;
+    };
     cars: Car[];
     faqs: { id: string; faqTitle: string; faqDescription: string }[];
     textBlock: { body: string }[];
@@ -77,7 +81,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 async function getData(slug: string): Promise<{ data: Destination[] }> {
     const response = await axios.get(
-        `https://strapi-production-5b34.up.railway.app/api/destinations?filters[slug][$eq]=${slug}&populate[cars][populate]=*&populate[faqs][populate]=*&populate[textBlock][populate]=*`
+        `https://strapi-production-5b34.up.railway.app/api/destinations?filters[slug][$eq]=${slug}&populate[cars][populate]=*&populate[faqs][populate]=*&populate[textBlock][populate]=*&populate[cityOrigin][populate]=*&populate[cityWhen][populate]=*`
     );
     return response.data;
 }
@@ -146,7 +150,7 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                     <div className="flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-6 lg:space-x-8 text-base sm:text-lg">
                         <div className="flex items-center bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center shadow-md hover:shadow-lg transition-shadow">
                             <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-green-600 dark:text-green-400" />
-                            <span className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">От: {data?.cityOrigin}</span>
+                            <span className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">От: {data?.cityOrigin.name}</span>
                         </div>
                         <div className="hidden sm:block">
                             <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-full p-2 sm:p-3 shadow-lg">
@@ -157,7 +161,7 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                         </div>
                         <div className="flex items-center bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 rounded-full px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center shadow-md hover:shadow-lg transition-shadow">
                             <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-purple-600 dark:text-purple-400" />
-                            <span className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">До: {data?.cityWhen}</span>
+                            <span className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">До: {data?.cityWhen.name}</span>
                         </div>
                     </div>
                     <div className="text-center mt-6 sm:mt-8">
@@ -592,7 +596,7 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                     </div>
 
                     <ButtonPrimary
-                        href={`/checkout?cityOrigin=${data?.cityOrigin}&cityWhen=${data?.cityWhen}`}
+                        href={`/checkout?cityOrigin=${data?.cityOrigin.name}&cityWhen=${data?.cityWhen.name}`}
                         className="w-full mb-4 text-sm sm:text-base py-3 sm:py-4"
                     >
                         <div className="flex items-center justify-center">
@@ -639,7 +643,7 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                     {/* Main Content */}
                     <div className="w-full space-y-6 sm:space-y-8">
                         {renderSection1()}
-                        {cars?.map((car) => renderSection2(car, data?.cityOrigin as string, data?.cityWhen as string))}
+                        {cars?.map((car) => renderSection2(car, data?.cityOrigin.name as string, data?.cityWhen.name as string))}
                         {htmlBlock?.map((block, index) => (
                             <div key={index}>{renderSection11(block)}</div>
                         ))}
@@ -683,7 +687,7 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                 <div className="hidden lg:flex lg:flex-row">
                     <div className="w-full lg:w-3/5 xl:w-2/3 space-y-8 lg:pr-10 lg:space-y-10">
                         {renderSection1()}
-                        {cars?.map((car) => renderSection2(car, data?.cityOrigin as string, data?.cityWhen as string))}
+                        {cars?.map((car) => renderSection2(car, data?.cityOrigin.name as string, data?.cityWhen.name as string))}
                         {htmlBlock?.map((block, index) => (
                             <div key={index}>{renderSection11(block)}</div>
                         ))}
