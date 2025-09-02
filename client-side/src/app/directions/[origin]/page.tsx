@@ -224,7 +224,7 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
 
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">{route.attributes.destination}</h3>
+          <p className="text-xl font-bold text-gray-900 dark:text-white">{route.attributes.destination}</p>
           <div className="flex items-center text-yellow-400">
             <StarIcon className="w-5 h-5 fill-current" />
             <span className="ml-1 text-sm font-medium text-gray-700 dark:text-gray-300">{route.attributes.rating}</span>
@@ -270,9 +270,9 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
         {/* SEO Text Block */}
         <div className="mt-16 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-neutral-800 dark:to-neutral-900 py-12 mb-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
-              Такси из {cityData?.city?.name} - надежный трансфер
-            </h3>
+            <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
+              Такси из {cityData?.city?.name} Ваш надежный трансфер
+            </h2>
 
             <div className="prose prose-lg dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
               <div
@@ -287,7 +287,7 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
 
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Доступные направления из {cityData ? cityData?.city?.name : origin}
+            Популярные направления из {cityData ? cityData?.city?.name : origin}
           </h2>
          
         </div>
