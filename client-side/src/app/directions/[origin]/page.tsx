@@ -177,9 +177,6 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="text-center">
           <div className="flex items-center justify-center mb-6">
-            <div className="bg-white bg-opacity-20 rounded-full p-3 mr-4">
-              <MapPinIcon className="w-8 h-8" />
-            </div>
             <h1 className="text-4xl sm:text-5xl font-bold">
               {cityData?.title}
             </h1>
