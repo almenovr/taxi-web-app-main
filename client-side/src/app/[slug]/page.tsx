@@ -164,12 +164,6 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                             <span className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">До: {data?.cityWhen.name}</span>
                         </div>
                     </div>
-                    <div className="text-center mt-6 sm:mt-8">
-                        <div className="inline-flex items-center bg-gradient-to-r from-orange-100 to-red-100 dark:from-orange-900 dark:to-red-900 rounded-full px-4 py-2 sm:px-6 text-xs sm:text-sm shadow-md">
-                            <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2 text-orange-600 dark:text-orange-400" />
-                            <span className="text-gray-700 dark:text-gray-300 font-medium">Примерное время в пути: 2-3 часа</span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
