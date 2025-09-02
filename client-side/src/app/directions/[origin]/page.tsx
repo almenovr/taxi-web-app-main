@@ -6,6 +6,7 @@ import { MapPinIcon, ClockIcon, CurrencyDollarIcon, StarIcon, ArrowRightIcon, Ph
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
+import Showdown from "showdown";
 
 interface Route {
   id: number;
@@ -64,6 +65,8 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
   const [cityData, setCityData] = useState<CityData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [contentHTML, setContentHTML] = useState('');
+  
 
   useEffect(() => {
     const fetchRoutes = async () => {
@@ -72,7 +75,15 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
         // Получаем данные города по slug
         const cityResponse = await axios.get(`https://strapi-production-5b34.up.railway.app/api/main-cities?filters[slug][$eq]=${params.origin}&populate=*`);
         const fetchedCityData = cityResponse.data.data[0];
-
+        
+        const converter = new Showdown.Converter();
+        
+        try {
+            setContentHTML(converter.makeHtml(typeof fetchedCityData.text === 'string' ? fetchedCityData.text : ""));
+        } catch (error) {
+            console.error('Error converting description:', error);
+            setContentHTML("");
+        }
         if (fetchedCityData) {
           // Сохраняем данные города для использования в компоненте
           setCityData(fetchedCityData);
@@ -267,9 +278,11 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
             </h3>
 
             <div className="prose prose-lg dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
-              <p className="text-lg leading-relaxed mb-6">
-                {cityData?.text}
-              </p>
+              <div
+                        id="single-entry-content"
+                        className="prose dark:prose-invert prose-base sm:prose-lg max-w-screen-lg mx-auto dark:prose-dark px-2 sm:px-0 text-gray-700 dark:text-gray-300"
+                        dangerouslySetInnerHTML={{ __html: contentHTML }}
+                    />
 
             </div>
           </div>
@@ -277,7 +290,7 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
 
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Доступные направления из {cityData ? cityData?.city.name : origin}
+            Доступные направления из {cityData ? cityData?.city?.name : origin}
           </h2>
          
         </div>
