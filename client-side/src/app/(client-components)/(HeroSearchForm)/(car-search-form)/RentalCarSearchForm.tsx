@@ -1,6 +1,6 @@
 "use client";
 
-import React, {FC, useRef, useState, useEffect} from "react";
+import React, {FC, useRef, useState, useEffect, useCallback} from "react";
 import {MapPinIcon} from "@heroicons/react/24/outline";
 import ClearDataButton from "@/app/(client-components)/(HeroSearchForm)/ClearDataButton";
 import {useRouter} from "next/navigation";
@@ -16,34 +16,69 @@ const popularCities = [
 const RentalCarSearchForm: FC<RentalCarSearchFormProps> = ({}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-    const router = useRouter()
+  const router = useRouter();
+  const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [cityOrigin, setCityOrigin] = useState("");
   const [cityWhen, setCityWhen] = useState("");
   const [showPopover, setShowPopover] = useState(false);
   const [filteredCities, setFilteredCities] = useState<string[]>([]);
 
+  // Новые состояния для работы с API
+  const [allCities, setAllCities] = useState<string[]>([]);
+  const [citiesLoading, setCitiesLoading] = useState(false);
+  const [citiesError, setCitiesError] = useState<string | null>(null);
+  const [activeField, setActiveField] = useState<"origin" | "destination" | null>(null);
+
+  // Загрузка всех городов при монтировании компонента
   useEffect(() => {
-    if (cityOrigin.length > 0) {
-      const filtered = popularCities.filter(city =>
-        city.toLowerCase().includes(cityOrigin.toLowerCase())
-      );
-      setFilteredCities(filtered);
-    } else {
-      setFilteredCities([]);
+    const loadAllCities = async () => {
+      try {
+        setCitiesLoading(true);
+        setCitiesError(null);
+        const response = await axios.get('https://strapi-production-5b34.up.railway.app/api/cities');
+        const cities = response.data.data.map((city: any) => city.name);
+        setAllCities(cities);
+      } catch (error) {
+        console.error('Error loading cities:', error);
+        setCitiesError('Не удалось загрузить список городов');
+        // Fallback to static list
+        setAllCities(popularCities);
+      } finally {
+        setCitiesLoading(false);
+      }
+    };
+
+    loadAllCities();
+  }, []);
+
+  // Функция для фильтрации городов с дебаунсингом
+  const filterCities = useCallback((query: string, field: "origin" | "destination") => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
     }
-  }, [cityOrigin]);
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      if (query.length > 0) {
+        const filtered = allCities.filter(city =>
+          city.toLowerCase().includes(query.toLowerCase())
+        );
+        setFilteredCities(filtered);
+        setActiveField(field);
+      } else {
+        setFilteredCities([]);
+        setActiveField(null);
+      }
+    }, 300);
+  }, [allCities]);
 
   useEffect(() => {
-    if (cityWhen.length > 0) {
-      const filtered = popularCities.filter(city =>
-        city.toLowerCase().includes(cityWhen.toLowerCase())
-      );
-      setFilteredCities(filtered);
-    } else {
-      setFilteredCities([]);
-    }
-  }, [cityWhen]);
+    filterCities(cityOrigin, "origin");
+  }, [cityOrigin, filterCities]);
+
+  useEffect(() => {
+    filterCities(cityWhen, "destination");
+  }, [cityWhen, filterCities]);
 
   const handleCitySelect = (city: string, isOrigin: boolean) => {
     if (isOrigin) {
@@ -105,7 +140,7 @@ const RentalCarSearchForm: FC<RentalCarSearchFormProps> = ({}) => {
                               }}
                           />
                       )}
-                      {filteredCities.length > 0 && showPopover && (
+                      {filteredCities.length > 0 && showPopover && activeField === "origin" && (
                           <div className="absolute top-full left-0 right-0 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md shadow-lg z-50 mt-1">
                               {filteredCities.slice(0, 5).map((city, index) => (
                                   <div
@@ -116,6 +151,11 @@ const RentalCarSearchForm: FC<RentalCarSearchFormProps> = ({}) => {
                                       {city}
                                   </div>
                               ))}
+                          </div>
+                      )}
+                      {citiesLoading && activeField === "origin" && (
+                          <div className="absolute top-full left-0 right-0 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md shadow-lg z-50 mt-1">
+                              <div className="px-4 py-2 text-gray-500 text-sm">Загрузка городов...</div>
                           </div>
                       )}
                   </div>
@@ -158,7 +198,7 @@ const RentalCarSearchForm: FC<RentalCarSearchFormProps> = ({}) => {
                               }}
                           />
                       )}
-                      {filteredCities.length > 0 && showPopover && (
+                      {filteredCities.length > 0 && showPopover && activeField === "destination" && (
                           <div className="absolute top-full left-0 right-0 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md shadow-lg z-50 mt-1">
                               {filteredCities.slice(0, 5).map((city, index) => (
                                   <div
@@ -169,6 +209,11 @@ const RentalCarSearchForm: FC<RentalCarSearchFormProps> = ({}) => {
                                       {city}
                                   </div>
                               ))}
+                          </div>
+                      )}
+                      {citiesLoading && activeField === "destination" && (
+                          <div className="absolute top-full left-0 right-0 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md shadow-lg z-50 mt-1">
+                              <div className="px-4 py-2 text-gray-500 text-sm">Загрузка городов...</div>
                           </div>
                       )}
                   </div>
