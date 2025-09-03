@@ -591,19 +591,6 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                     </div>
 
                     {/* Quick Contact */}
-                    <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 dark:border-neutral-700">
-                        <h4 className="font-semibold mb-3 text-center text-sm sm:text-base">Нужна помощь?</h4>
-                        <div className="space-y-2">
-                            <a href="tel:+79890087999"
-                               className="flex items-center justify-center bg-green-50 dark:bg-green-900 dark:bg-opacity-20 rounded-lg p-2 sm:p-3 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200">
-                                <PhoneIcon className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
-                                <span className="text-sm font-medium text-green-800 dark:text-green-300">+7 (989) 008-79-99</span>
-                            </a>
-                            <div className="text-center">
-                                <span className="text-xs text-gray-500">Работаем круглосуточно</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         );
@@ -628,25 +615,7 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                     </div>
 
                     {/* Mobile Sidebar */}
-                    <div className="w-full space-y-6">
-                        {/* Contact Info */}
-                        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-4 sm:p-6">
-                            <h4 className="font-bold mb-4 text-center sm:text-left">Нужна помощь?</h4>
-                            <div className="space-y-4">
-                                <a href="tel:+79890087999"
-                                    className="flex flex-col sm:flex-row items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200">
-                                    <div className="flex items-center">
-                                        <PhoneIcon className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
-                                        <div className="text-center sm:text-left">
-                                            <div className="font-medium text-green-800 dark:text-green-300">+7 (989) 008-79-99</div>
-                                            <div className="text-sm text-green-600 dark:text-green-400">Круглосуточно</div>
-                                        </div>
-                                    </div>
-                                    <div className="text-xs text-green-600 dark:text-green-400 font-medium sm:hidden">Нажмите для звонка</div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                
                 </div>
 
                 {/* Desktop Layout - Side by side */}
@@ -660,24 +629,6 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                         {renderSection12()}
                         {data.faqs.length ? renderSection9(data.faqs) : null}
                         {data.mapLink ? renderSection10(data.mapLink) : null}
-                    </div>
-                    <div className="flex-grow mt-10">
-                        <div className="sticky top-28">
-                            {/* Contact Info */}
-                            <div className="mt-6 bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-6">
-                                <h4 className="font-bold mb-4">Нужна помощь?</h4>
-                                <div className="space-y-3">
-                                    <a href="tel:+79890087999"
-                                        className="flex items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200">
-                                        <PhoneIcon className="w-5 h-5 text-green-600 mr-3 flex-shrink-0" />
-                                        <div>
-                                            <div className="font-medium text-green-800 dark:text-green-300">+7 (989) 008-79-99</div>
-                                            <div className="text-sm text-green-600 dark:text-green-400">Круглосуточно</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </main>
