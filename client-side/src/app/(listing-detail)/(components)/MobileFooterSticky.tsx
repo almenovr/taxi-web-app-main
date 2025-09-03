@@ -18,7 +18,7 @@ const MobileFooterSticky = () => {
           <ButtonPrimary
               sizeClass="px-5 sm:px-7 py-3 !rounded-2xl"
               className={"bottom-button-call"}
-              href={"tel:+79780109992"}
+              href={"tel:+79890087999"}
           >
               Позвонить
           </ButtonPrimary>

@@ -594,10 +594,10 @@ const ListingCarDetailPage = async ({ params }: { params: any }) => {
                     <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 dark:border-neutral-700">
                         <h4 className="font-semibold mb-3 text-center text-sm sm:text-base">Нужна помощь?</h4>
                         <div className="space-y-2">
-                            <a href="tel:+79781099992"
+                            <a href="tel:+79890087999"
                                className="flex items-center justify-center bg-green-50 dark:bg-green-900 dark:bg-opacity-20 rounded-lg p-2 sm:p-3 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors duration-200">
                                 <PhoneIcon className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
-                                <span className="text-sm font-medium text-green-800 dark:text-green-300">+7 (978) 109-99-92</span>
+                                <span className="text-sm font-medium text-green-800 dark:text-green-300">+7 (989) 008-79-99</span>
                             </a>
                             <div className="text-center">
                                 <span className="text-xs text-gray-500">Работаем круглосуточно</span>

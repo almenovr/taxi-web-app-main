@@ -295,7 +295,7 @@ const DirectionsPage: FC = () => {
           <p className="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto">
             Свяжитесь с нами, и мы организуем трансфер из любого города России
           </p>
-          <ButtonPrimary href="tel:+79781099992" className="inline-flex items-center bg-white text-indigo-600 hover:bg-gray-100">
+          <ButtonPrimary href="tel:+79890087999" className="inline-flex items-center bg-white text-indigo-600 hover:bg-gray-100">
             <MapPinIcon className="w-5 h-5 mr-2" />
             Узнать больше
           </ButtonPrimary>

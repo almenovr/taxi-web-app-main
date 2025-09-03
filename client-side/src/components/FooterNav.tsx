@@ -150,8 +150,8 @@ const FooterNav = () => {
         {/* MENU */}
         {NAV.map(renderItem)}
         <div className="unit__body" style={{marginTop: "1rem", fontSize: "1.2rem"}}>
-          <a className="text-middle" href="tel:+79780109992">+7 (978) 010-99-92</a>
-          <a href="tel:+79780109992" style={{width: "60px", display: "inline-block", textAlign: "center"}}>
+          <a className="text-middle" href="tel:+79890087999">+7 (989) 008-79-99</a>
+          <a href="tel:+79890087999" style={{width: "60px", display: "inline-block", textAlign: "center"}}>
             <span className="pulse">
               <PhoneIcon className="w-full h-full text-green-600" />
             </span>

@@ -321,7 +321,7 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
             <p className="text-gray-600 dark:text-gray-300 mb-6">
               Свяжитесь с нами, и мы организуем трансфер в любую точку Крыма
             </p>
-            <ButtonPrimary href="tel:+79781099992" className="inline-flex items-center">
+            <ButtonPrimary href="tel:+79890087999" className="inline-flex items-center">
               <PhoneIcon className="w-5 h-5 mr-2" />
               Позвонить
             </ButtonPrimary>

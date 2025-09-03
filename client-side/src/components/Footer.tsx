@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
         <span>Междугороднее такси Встреча. Такси ЖД вокзал Симферополь, Такси аэропорт Симферополь (SIP). График работы 24/7, © 2009 Taxi Vstrecha</span>
 
       </div></center>
-      <center><span style={{paddingBottom: "5rem", color: "blue"}}><a href="tel:+79780109992">Заказать такси сейчас +7 (978) 010–99-92</a></span></center>
+      <center><span style={{paddingBottom: "5rem", color: "blue"}}><a href="tel:+79890087999">Заказать такси сейчас +7 (989) 008-79-99</a></span></center>
     </>
   );
 };

@@ -51,7 +51,7 @@ const PageContact: FC<PageContactProps> = ({}) => {
       </div>
       {/* OTHER SECTIONS */}
       <div className="container" style={{paddingBottom: "1rem", paddingTop: "1rem"}}>
-        <center><ButtonPrimary href="tel:+79780109992" sizeClass="px-5 py-4 sm:px-7">
+        <center><ButtonPrimary href="tel:+79890087999" sizeClass="px-5 py-4 sm:px-7">
           Позвонить
         </ButtonPrimary></center>
 
