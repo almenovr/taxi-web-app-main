@@ -92,11 +92,15 @@ const RentalCarSearchForm: FC<RentalCarSearchFormProps> = ({}) => {
   const handleClick = async (e: any) => {
       e.preventDefault();
       try {
-        const response = await axios.get(`https://strapi-production-5b34.up.railway.app/api/destinations?filters[$and][0][cityOrigin][$eq]=${cityOrigin}&filters[$and][1][cityWhen][$eq]=${cityWhen}`);
+        // Поиск по названиям городов в связанных объектах
+        const response = await axios.get(`https://strapi-production-5b34.up.railway.app/api/destinations?filters[$and][0][cityOrigin][name][$eq]=${cityOrigin}&filters[$and][1][cityWhen][name][$eq]=${cityWhen}&populate=*`);
         const data = response.data;
-        if(data.data.length > 0)
-          router.push(data.data[0].slug);
-        else {
+
+        if(data.data.length > 0) {
+          // Перенаправляем на страницу направления по slug
+          router.push(`/${data.data[0].slug}`);
+        } else {
+          // Если не найдено, перенаправляем на страницу "направление не найдено"
           router.push('/destination-not-found');
         }
       } catch (error) {
