@@ -105,7 +105,7 @@ const FooterNav = () => {
           isActive ? "text-neutral-900 dark:text-neutral-100" : ""
         }`}
       >
-        <item.icon iconClassName="w-14 h-15 " className={``}  />
+        <item.icon iconClassName="w-14 h-15 " className={``} style={{marginTop: "1.5rem"}} />
         <span className="text-[11px] leading-none mt-1" style={{fontSize: "1.5rem"}}>{item.name}</span>
       </div>
     );

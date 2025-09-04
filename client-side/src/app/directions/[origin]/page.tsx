@@ -7,14 +7,12 @@ import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
 import Showdown from "showdown";
+import { Route } from "lucide-react";
 
 interface Route {
   id: number;
   attributes: {
     destination: string;
-    distance: string;
-    duration: string;
-    price: number;
     description: string;
     image: {
       data: {
@@ -75,7 +73,7 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
         // Получаем данные города по slug
         const cityResponse = await axios.get(`https://strapi-production-5b34.up.railway.app/api/main-cities?filters[slug][$eq]=${params.origin}&populate=*`);
         const fetchedCityData = cityResponse.data.data[0];
-        
+        const destinations = fetchedCityData.destinations;
         const converter = new Showdown.Converter();
         
         try {
@@ -90,17 +88,33 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
 
           
           console.log('test', fetchedCityData);
-        
+          const mockRoutes: Route[] = [];
           // Здесь можно получить маршруты для этого города
           // Пока используем моковые данные, но структура соответствует API
-          const mockRoutes: Route[] = [
+          for(const destination of destinations) {
+            mockRoutes.push({
+              id: destination.id,
+              attributes: {
+                destination: destination.title,
+                description: "Популярный маршрут в столицу Крыма через Керченский мост",
+                image: {
+                  data: {
+                    attributes: {
+                      url: "/placeholder-car.jpg"
+                    }
+                  }
+                },
+                rating: 4.8,
+                popular: true,
+                slug: destination.slug
+              }
+            });
+          }
+          const mockRoutess: Route[] = [
             {
               id: 1,
               attributes: {
                 destination: "Симферополь",
-                distance: "320 км",
-                duration: "5-6 часов",
-                price: 4500,
                 description: "Популярный маршрут в столицу Крыма через Керченский мост",
                 image: {
                   data: {
@@ -118,9 +132,6 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
               id: 2,
               attributes: {
                 destination: "Севастополь",
-                distance: "380 км",
-                duration: "6-7 часов",
-                price: 5200,
                 description: "Путешествие к Черному морю с остановками в живописных местах",
                 image: {
                   data: {
@@ -138,9 +149,6 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
               id: 3,
               attributes: {
                 destination: "Ялта",
-                distance: "420 км",
-                duration: "7-8 часов",
-                price: 5800,
                 description: "Маршрут к курортной жемчужине Крыма",
                 image: {
                   data: {
@@ -231,26 +239,8 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
           </div>
         </div>
 
-        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 leading-relaxed">
-          {route.attributes.description}
-        </p>
-
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-            <MapPinIcon className="w-4 h-4 mr-2 text-blue-500" />
-            <span>{route.attributes.distance}</span>
-          </div>
-          <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-            <ClockIcon className="w-4 h-4 mr-2 text-green-500" />
-            <span>{route.attributes.duration}</span>
-          </div>
-        </div>
-
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-            от {route.attributes.price.toLocaleString()} ₽
-          </div>
-          <Link href={`/${origin.toLowerCase()}-${route.attributes.slug}`}>
+          <Link href={`/${route.attributes.slug}`}>
             <ButtonPrimary className="flex items-center">
               Выбрать
               <ArrowRightIcon className="w-4 h-4 ml-2" />
