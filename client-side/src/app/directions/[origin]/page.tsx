@@ -7,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
 import Showdown from "showdown";
-import { Route } from "lucide-react";
 
 interface Route {
   id: number;
