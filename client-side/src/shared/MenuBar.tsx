@@ -13,6 +13,8 @@ const MenuBar: React.FC<MenuBarProps> = ({
   iconClassName = "h-8 w-8",
 }) => {
   const [isVisable, setIsVisable] = useState(false);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [touchEndX, setTouchEndX] = useState<number | null>(null);
 
   const pathname = usePathname();
 
@@ -20,8 +22,48 @@ const MenuBar: React.FC<MenuBarProps> = ({
     setIsVisable(false);
   }, [pathname]);
 
+  // Add keyboard support for Escape key
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isVisable) {
+        handleCloseMenu();
+      }
+    };
+
+    if (isVisable) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isVisable]);
+
   const handleOpenMenu = () => setIsVisable(true);
   const handleCloseMenu = () => setIsVisable(false);
+
+  // Touch handlers for swipe gesture
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX || !touchEndX) return;
+
+    const distance = touchStartX - touchEndX;
+    const isLeftSwipe = distance > 50; // Minimum swipe distance
+
+    if (isLeftSwipe) {
+      handleCloseMenu();
+    }
+
+    setTouchStartX(null);
+    setTouchEndX(null);
+  };
 
   const renderContent = () => {
     return (
@@ -40,7 +82,10 @@ const MenuBar: React.FC<MenuBarProps> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 bg-black/60 dark:bg-black/70" />
+            <Dialog.Overlay
+              className="fixed inset-0 bg-black/60 dark:bg-black/70 cursor-pointer"
+              onClick={handleCloseMenu}
+            />
           </Transition.Child>
           <div className="fixed inset-0">
             <div className="flex justify-end min-h-full ">
@@ -53,7 +98,12 @@ const MenuBar: React.FC<MenuBarProps> = ({
                 leaveFrom="opacity-100 translate-x-0"
                 leaveTo="opacity-0 translate-x-56"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden transition-all ">
+                <Dialog.Panel
+                  className="w-full max-w-md transform overflow-hidden transition-all"
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                >
                   <NavMobile onClickClose={handleCloseMenu} />
                 </Dialog.Panel>
               </Transition.Child>
