@@ -302,7 +302,7 @@ const OriginPage: FC<OriginPageProps> = ({ params }) => {
           </div>
         )}
 
-        <div className="text-center">
+        <div className="text-center" style="margin-top: 3rem;">
           <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-lg p-8 max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
               Не нашли подходящее направление?
