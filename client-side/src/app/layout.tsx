@@ -41,7 +41,6 @@ export default function RootLayout({
         <ErrorBoundary>
           <ClientCommons />
           <SiteHeader />
-          <MobileFooterSticky />
           {children}
           <Footer />
         </ErrorBoundary>
