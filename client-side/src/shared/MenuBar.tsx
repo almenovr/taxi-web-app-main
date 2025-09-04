@@ -88,7 +88,7 @@ const MenuBar: React.FC<MenuBarProps> = ({
             />
           </Transition.Child>
           <div className="fixed inset-0">
-            <div className="flex min-h-full pr-40">
+            <div className="flex min-h-full pr-48">
               <Transition.Child
                 as={Fragment}
                 enter="transition duration-100 transform"
