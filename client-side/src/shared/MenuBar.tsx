@@ -88,7 +88,7 @@ const MenuBar: React.FC<MenuBarProps> = ({
             />
           </Transition.Child>
           <div className="fixed inset-0">
-            <div className="flex min-h-full pr-16">
+            <div className="flex min-h-full pr-40">
               <Transition.Child
                 as={Fragment}
                 enter="transition duration-100 transform"
@@ -99,7 +99,7 @@ const MenuBar: React.FC<MenuBarProps> = ({
                 leaveTo="opacity-0 -translate-x-56"
               >
                 <Dialog.Panel
-                  className="w-full max-w-xs transform overflow-hidden transition-all rounded-r-2xl rounded-l-none h-full"
+                  className="w-full max-w-64 transform overflow-hidden transition-all rounded-r-2xl rounded-l-none h-full"
                   onTouchStart={handleTouchStart}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
