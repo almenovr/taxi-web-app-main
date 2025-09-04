@@ -161,7 +161,7 @@ export const NAVIGATION_DEMO: NavItemType[] = [
   },
   {
     id: ncNanoId(),
-    href: "/vip-taksi-kryma" as PathName,
+    href: "/directions/mezhdugorodnee-taksi-rostov" as PathName,
     name: "Ростов",
     type: "none",
     isNew: false,
