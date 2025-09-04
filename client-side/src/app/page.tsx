@@ -92,7 +92,6 @@ async function PageHome() {
                            sliderText={data.data.sliderText}/>
 
               {/* SECTION 1 */}
-              <SectionSliderNewCategories categories={popularDestinations}/>
 
               <SectionOurFeatures blockText={data.data.blockText} blockTitle={data.data.blockTitle} heading="h2"/>
 
