@@ -149,7 +149,7 @@ const FooterNav = () => {
       <div className="w-full max-w-lg flex justify-around mx-auto text-sm text-center ">
         {/* MENU */}
         {NAV.map(renderItem)}
-        <div className="unit__body" style={{marginTop: "1rem", fontSize: "1.2rem"}}>
+        <div className="unit__body" style={{fontSize: "1.2rem"}}>
           <a className="text-middle" href="tel:+79890087999">+7 (989) 008-79-99</a>
           <a href="tel:+79890087999" style={{width: "60px", display: "inline-block", textAlign: "center"}}>
             <span className="pulse">
