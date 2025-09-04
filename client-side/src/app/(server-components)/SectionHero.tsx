@@ -23,9 +23,6 @@ const SectionHero: FC<SectionHeroProps> = ({ className = "", sliderTitle = "", s
           <span className="text-base md:text-lg text-neutral-500 dark:text-neutral-400">
             {sliderText}
           </span>
-          <ButtonPrimary href="tel:+79890087999" sizeClass="px-5 py-4 sm:px-7">
-            Позвонить
-          </ButtonPrimary>
         </div>
         <div className="flex-grow">
           <Image className="w-full" src={imagePng} alt="hero" priority />
