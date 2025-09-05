@@ -168,7 +168,7 @@ export const NAVIGATION_DEMO: NavItemType[] = [
   },
   {
     id: ncNanoId(),
-    href: "/simferopol-alushta" as PathName,
+    href: "/directions/mezhdugorodnee-taksi-sochi" as PathName,
     name: "Сочи(Адлер)",
     type: "none",
     isNew: false,
@@ -182,7 +182,7 @@ export const NAVIGATION_DEMO: NavItemType[] = [
   },
   {
     id: ncNanoId(),
-    href: "/simferopol-sevastopol" as PathName,
+    href: "/directions/mezhdugorodnee-taksi-krasnodar" as PathName,
     name: "Краснодар",
     type: "none",
     isNew: false,
