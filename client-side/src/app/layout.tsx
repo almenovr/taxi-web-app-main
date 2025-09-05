@@ -29,13 +29,11 @@ export default function RootLayout({
         <meta property="og:title" content="Такси Сервис - Заказ такси онлайн" />
         <meta property="og:description" content="Быстрый и надежный заказ такси. Доступные цены, профессиональные водители." />
         <meta property="og:image" content="https://strapi-production-5b34.up.railway.app/uploads/taxi_og_image.jpg" />
-        <meta property="og:url" content="https://www.transfer-82.ru" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Такси Сервис - Заказ такси онлайн" />
         <meta name="twitter:description" content="Быстрый и надежный заказ такси. Доступные цены, профессиональные водители." />
         <meta name="twitter:image" content="https://strapi-production-5b34.up.railway.app/uploads/taxi_og_image.jpg" />
-        <link rel="canonical" href="https://www.transfer-82.ru" />
         <script
           type="text/javascript"
           dangerouslySetInnerHTML={{
