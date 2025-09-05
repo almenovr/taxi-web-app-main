@@ -46,7 +46,7 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Такси Сервис",
-  "url": "http://localhost:3000",
+  "url": "https://www.transfer-82.ru",
   "logo": "https://strapi-production-5b34.up.railway.app/uploads/logo.png",
   "description": "Быстрый и надежный заказ такси. Доступные цены, профессиональные водители.",
   "contactPoint": {
