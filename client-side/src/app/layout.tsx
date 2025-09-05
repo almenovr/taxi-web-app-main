@@ -36,6 +36,21 @@ export default function RootLayout({
         <meta name="twitter:description" content="Быстрый и надежный заказ такси. Доступные цены, профессиональные водители." />
         <meta name="twitter:image" content="https://strapi-production-5b34.up.railway.app/uploads/taxi_og_image.jpg" />
         <link rel="canonical" href="http://localhost:3000" />
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(m,e,t,r,i,k,a){
+                  m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                  m[i].l=1*new Date();
+                  for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+                  k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+              })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104031676', 'ym');
+
+              ym(104031676, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+            `,
+          }}
+        />
       </head>
       <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
         <ErrorBoundary>
@@ -44,6 +59,11 @@ export default function RootLayout({
           {children}
           <Footer />
         </ErrorBoundary>
+        <noscript>
+          <div>
+            <img src="https://mc.yandex.ru/watch/104031676" style={{ position: 'absolute', left: '-9999px' }} alt="" />
+          </div>
+        </noscript>
       </body>
     </html>
   );
