@@ -11,11 +11,15 @@ import Footer from "@/components/Footer";
 import MobileFooterSticky from "@/app/(listing-detail)/(components)/MobileFooterSticky";
 import React from "react";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import ServiceWorker from "@/components/ServiceWorker";
+import WebVitals from "@/components/WebVitals";
 
 const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
   weight: ["300", "400", "500", "600", "700"],
+  preload: true,
+  variable: '--font-poppins',
 });
 
 export default function RootLayout({
@@ -26,6 +30,13 @@ export default function RootLayout({
   return (
     <html lang="ru" className={poppins.className}>
       <head>
+        {/* Preload критических ресурсов */}
+        <link rel="preload" href="/favicon.ico" as="image" />
+        <link rel="dns-prefetch" href="//strapi-production-5b34.up.railway.app" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+
+        {/* SEO Meta tags */}
         <meta property="og:title" content="Такси Сервис - Заказ такси онлайн" />
         <meta property="og:description" content="Быстрый и надежный заказ такси. Доступные цены, профессиональные водители." />
         <meta property="og:image" content="https://strapi-production-5b34.up.railway.app/uploads/taxi_og_image.jpg" />
@@ -34,6 +45,13 @@ export default function RootLayout({
         <meta name="twitter:title" content="Такси Сервис - Заказ такси онлайн" />
         <meta name="twitter:description" content="Быстрый и надежный заказ такси. Доступные цены, профессиональные водители." />
         <meta name="twitter:image" content="https://strapi-production-5b34.up.railway.app/uploads/taxi_og_image.jpg" />
+
+        {/* Performance optimizations */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="theme-color" content="#2563eb" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <script
           type="text/javascript"
           dangerouslySetInnerHTML={{
@@ -56,6 +74,8 @@ export default function RootLayout({
           <SiteHeader />
           {children}
           <Footer />
+          <ServiceWorker />
+          <WebVitals />
         </ErrorBoundary>
         <noscript>
           <div>
