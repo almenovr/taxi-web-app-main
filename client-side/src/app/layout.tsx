@@ -31,7 +31,7 @@ export default function RootLayout({
     <html lang="ru" className={poppins.className}>
       <head>
         {/* Preload критических ресурсов */}
-        <link rel="preload" href="/favicon.ico" as="image" />
+        <link rel="preload" href="/images/favicon.ico" as="image" />
         <link rel="dns-prefetch" href="//strapi-production-5b34.up.railway.app" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
